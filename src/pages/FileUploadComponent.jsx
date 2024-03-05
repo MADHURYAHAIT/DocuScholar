@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { IoMdCloudUpload } from 'react-icons/io';
 import { IoIosCloudDone } from "react-icons/io";
 import { FaFileImage } from "react-icons/fa";
-import CalTile from '../pages/CalorieTile';
+// import CalTile from '../pages/CalorieTile';
 import {
   f7,
   f7ready,
