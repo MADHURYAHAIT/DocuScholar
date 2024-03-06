@@ -1,0 +1,6 @@
+#pip install -r requirements.txt
+google-generativeai
+langchain
+PyPDF2
+#faiss-c
+langchain_google_genai

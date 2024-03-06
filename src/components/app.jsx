@@ -77,7 +77,7 @@ const MyApp = () => {
             </Page>
           </View>
         </Panel> */}
-
+       
 
         {/* Right panel with reveal effect*/}
         <Panel right reveal>
