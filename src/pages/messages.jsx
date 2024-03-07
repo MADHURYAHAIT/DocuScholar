@@ -223,27 +223,11 @@ const MessagesPage =() => {
 
   return (
     <Page>
-       <div className="list links-list demo-fab-sheet fab-morph-target" slot="fixed">
-          <ul>
-            <li>
-              <a className="fab-close">Link 1</a>
-            </li>
-            <li>
-              <a className="fab-close">Link 2</a>
-            </li>
-            <li>
-              <a className="fab-close">Link 3</a>
-            </li>
-            <li>
-              <a className="fab-close">Link 4</a>
-            </li>
-          </ul>
-        </div>
       <Navbar title={<><FaFilePdf className='ninja'/> DocuScholar</>}> 
       {/* PdfMassiah */}
       
         <NavRight>
-          <Link iconIos="f7:menu" iconMd="material:menu" morphTo=".demo-fab-fullscreen-sheet.fab-morph-target" />
+          <Link iconIos="f7:info" iconMd="material:info"  popupOpen=".demo-popup-push" />
         </NavRight>
       </Navbar>
 

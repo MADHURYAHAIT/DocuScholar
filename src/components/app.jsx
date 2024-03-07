@@ -10,10 +10,10 @@ import {
   Popup,
   Page,
   Navbar,
+  
   Toolbar,
   NavRight,
   Link,
-  
   Block,
   BlockTitle,
   LoginScreen,
@@ -66,18 +66,41 @@ const MyApp = () => {
 
   return (
     <App { ...f7params }>
-
+        
 
         {/* Left panel with cover effect*/}
-        {/* <Panel left cover dark>
+        <Panel left cover dark>
           <View>
             <Page>
               <Navbar title="Left Panel"/>
               <Block>Left panel content goes here</Block>
+              {/* <a href="/form/">form</a>
+          <a href="">2</a>
+          <a href="">3</a> */}
+            <Button fill popupOpen=".demo-popup-push">Edit Profile</Button>
+            <List strong inset dividersIos>
+
+<ListItem
+    title="Description"
+    link="/form/"
+    />
+  <ListItem
+    title="Our Team"
+    link="/team/"
+    />
+  <ListItem
+    title="Contact Us"
+    link="/contact/"
+    />
+  <ListItem
+    title="Terms & Conditions"
+    link="/tnc/"
+    />
+</List>
             </Page>
           </View>
-        </Panel> */}
-       
+        </Panel>
+     
 
         {/* Right panel with reveal effect*/}
         <Panel right reveal>
@@ -85,7 +108,12 @@ const MyApp = () => {
             <Page>
               <Navbar title="Right Panel"/>
               <Block>Right panel content goes here</Block>
+            
+              <a href="/form/">form</a><br/>
+          <a href="">2</a>
+          <a href="">3</a>
               <List strong inset dividersIos>
+
                 <ListItem
                     title="Description"
                     link="/description/"
@@ -129,18 +157,43 @@ const MyApp = () => {
         </Views>
 
       {/* Popup */}
-      <Popup id="my-popup">
+      <Popup push className="demo-popup-push">
         <View>
           <Page>
-            <Navbar title="Popup">
+            <Navbar  transparent>
               <NavRight>
+
                 <Link popupClose>Close</Link>
               </NavRight>
             </Navbar>
-            <Block>
-              <p>Popup content goes here.</p>
-            </Block>
+          <Block>
+
+
+            <List strong inset dividersIos>
+
+                <ListItem
+                    title="Description"
+                    link="/description/"
+                    />
+                  <ListItem
+                    title="Our Team"
+                    link="/team/"
+                    />
+                  <ListItem
+                    title="Contact Us"
+                    link="/contact/"
+                    />
+                  <ListItem
+                    title="Terms & Conditions"
+                    link="/tnc/"
+                    />
+                </List>
+              </Block>
+              <BlockFooter bottom>
+            Hi what is up
+           </BlockFooter>
           </Page>
+         
         </View>
       </Popup>
 
