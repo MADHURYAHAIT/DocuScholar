@@ -227,7 +227,7 @@ const MessagesPage =() => {
       {/* PdfMassiah */}
       
         <NavRight>
-          <Link iconIos="f7:menu" iconMd="material:menu"   popupOpen=".demo-popup-push" /> 
+          <Link iconIos="f7:menu" iconMd="material:menu" className='menu'  popupOpen=".demo-popup-push" /> 
           {/* panelOpen="left" */}
         </NavRight>
       </Navbar>
@@ -264,14 +264,14 @@ const MessagesPage =() => {
         </MessagebarAttachments>
         <MessagebarSheet>
 
-          {/* {images.map((image, index) => (
+          {images.map((image, index) => (
             <MessagebarSheetImage
               key={index}
               image={image}
               checked={attachments.indexOf(image) >= 0}
               onChange={handleAttachment}
             />
-          ))} */}
+          ))}
         </MessagebarSheet>
       </Messagebar>
 

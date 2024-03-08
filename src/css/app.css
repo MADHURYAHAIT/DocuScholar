@@ -8,6 +8,19 @@
 
 }
 
+.ppup{
+    height:80%;
+}
+
+.menu i.icon {
+    color: #848484;
+}
+
+.popupfooter p{
+    color: #aeaeae;
+    text-align: center;
+
+}
 /* .messages-content, .messages{
     background:black;
 }
@@ -15,4 +28,11 @@
 .message-name{
     color: white;
 } */
+
+@media screen and (min-width: 700px) {
+    .navbar-inner {
+        padding: 18px;
+    }
+}
+
 

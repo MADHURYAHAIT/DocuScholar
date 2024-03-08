@@ -166,7 +166,7 @@ const MyApp = () => {
                 <Link popupClose>Close</Link>
               </NavRight>
             </Navbar>
-          <Block>
+          <Block className='ppup'>
 
 
             <List strong inset dividersIos>
@@ -176,8 +176,8 @@ const MyApp = () => {
                     link="/description/"
                     />
                   <ListItem
-                    title="Our Team"
-                    link="/team/"
+                    title="Credits"
+                    link="/credit/"
                     />
                   <ListItem
                     title="Contact Us"
@@ -189,9 +189,9 @@ const MyApp = () => {
                     />
                 </List>
               </Block>
-              <BlockFooter bottom>
-            Hi what is up
-           </BlockFooter>
+              <BlockFooter className='popupfooter' >
+                <p>made with ♥️ by Madhurya Hait</p>
+              </BlockFooter>
           </Page>
          
         </View>

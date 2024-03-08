@@ -6,11 +6,13 @@ import CatalogPage from '../pages/catalog.jsx';
 import ProductPage from '../pages/product.jsx';
 import SettingsPage from '../pages/settings.jsx';
 import DescriptionPage from '../pages/description.jsx';
+import TermsAndConditions from '../pages/tnc.jsx';
 
 import DynamicRoutePage from '../pages/dynamic-route.jsx';
 import RequestAndLoad from '../pages/request-and-load.jsx';
 import NotFoundPage from '../pages/404.jsx';
 import MessagesPage from '../pages/messages.jsx';
+import ReachUs from '../pages/contact.jsx';
 
 var routes = [
   {
@@ -20,6 +22,14 @@ var routes = [
   {
     path: '/about/',
     component: AboutPage,
+  },
+  {
+    path: '/tnc/',
+    component: TermsAndConditions,
+  },
+  {
+    path: '/contact/',
+    component: ReachUs,
   },
   {
     path: '/description/',
