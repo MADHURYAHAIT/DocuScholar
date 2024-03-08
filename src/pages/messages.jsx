@@ -227,7 +227,8 @@ const MessagesPage =() => {
       {/* PdfMassiah */}
       
         <NavRight>
-          <Link iconIos="f7:info" iconMd="material:info"  popupOpen=".demo-popup-push" />
+          <Link iconIos="f7:menu" iconMd="material:menu"   popupOpen=".demo-popup-push" /> 
+          {/* panelOpen="left" */}
         </NavRight>
       </Navbar>
 
