@@ -9,10 +9,21 @@ const description = () => {
         <Page>
         <Navbar title="Description" backLink="Back" />
         <Block style={{paddingLeft:'30px',paddingRight:'30px'}} >
-                <h1><FaFilePdf className='ninja'/> DocuScholar</h1>
 
+        <div class="grid-container">
+            <div class="grid-item"> <h1><FaFilePdf className='ninja'/> DocuScholar</h1> </div>
+            <div class="grid-item">
+                 <img
+                    src="/images/profile.jpg"  // Replace with the actual path to your image
+                    alt="App Credits"
+                    style={{ width: '100%', maxWidth: '200px', margin: '20px auto',borderRadius:'50%', }}
+                    />
+                </div>
+        </div>
+               
+
+               
                 <h2>Welcome to DocuScholar!</h2>
-
                  <h3> Overview</h3>
 
                 DocuScholar is an innovative and user-friendly application designed to enhance your document collaboration experience. With a focus on simplicity and efficiency, this application allows users to seamlessly communicate and collaborate on PDF documents in real-time.

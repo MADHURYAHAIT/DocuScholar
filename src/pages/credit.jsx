@@ -9,14 +9,8 @@ const Credits = () => {
       <Page>
         <Navbar title="Credits" backLink="Back" />
         <Block style={{ paddingLeft: '30px', paddingRight: '30px' }}>
-          <h1>
-            <FaFilePdf className='ninja' /> Credits  
-          </h1>
-          <img
-            src="/images/profile.jpg"  // Replace with the actual path to your image
-            alt="App Credits"
-            style={{ width: '100%', maxWidth: '300px', margin: '20px auto',borderRadius:'50%' }}
-          />
+ 
+         
           <h2> Development</h2>
 
 
@@ -38,19 +32,21 @@ const Credits = () => {
         "When I mad this website I had one thing in mind that is to make a platform which can help students. A guide, a tutor whom you can chat with and get your doubts cleared whenever you want."
         </p>
       </CardContent>
-      <CardFooter>
-      <a href="https://twitter.com/MadhuryaCodes" target="_blank">
-            <FaSquareXTwitter size={24} />
-      </a>
-      <Link href="https://github.com/MADHURYAHAIT" target="_blank">
-            <FaGithub size={24} />
-      </Link>
-      <Link href="https://www.instagram.com/madhuryahait/" target="_blank">
-             <FaInstagram size={24} />
-      </Link>
-      <Link href="https://www.linkedin.com/in/madhurya-hait-b8128017a/" target="_blank">
-            <FaLinkedin size={24} />
-                    </Link>
+
+      <CardFooter style={{padding:'20px 40px'}} >
+           
+            <Link href="/x/" target="_blank">
+                <FaSquareXTwitter size={27} />
+            </Link>
+            <Link href="/github/" target="_blank">
+                    <FaGithub size={27} />
+            </Link>
+            <Link href="/ig/" target="_blank">
+                    <FaInstagram size={27} />
+            </Link>
+            <Link href="/li/" target="_blank">
+                    <FaLinkedin size={27} />
+            </Link>
       </CardFooter>
     </Card>
 

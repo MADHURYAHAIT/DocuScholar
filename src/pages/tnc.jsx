@@ -8,13 +8,11 @@ const TermsAndConditions = () => {
       <Page>
         <Navbar title="Terms and Conditions" backLink="Back" />
         <Block style={{ paddingLeft: '30px', paddingRight: '30px' }}>
-          <h1>
-            <FaFilePdf className='ninja' /> DocuScholar Terms and Conditions
-          </h1>
+        
 
-          <h2>Welcome to DocuScholar!</h2>
+       
 
-          <h3>Overview</h3>
+          <h2>Overview</h2>
 
           DocuScholar is an innovative and user-friendly application designed for collaborative document editing. Before using our services, please read and agree to the following terms and conditions.
 

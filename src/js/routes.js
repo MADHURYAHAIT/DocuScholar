@@ -25,6 +25,34 @@ var routes = [
     component: AboutPage,
   },
   {
+    path: '/x/',
+    component: () => {
+      window.location.href = "https://twitter.com/MadhuryaCodes";
+      return null; // or an empty component
+    },
+  },
+  {
+    path: '/github/',
+    component: () => {
+      window.location.href = "https://github.com/MADHURYAHAIT";
+      return null; // or an empty component
+    },
+  },
+  {
+    path: '/ig/',
+    component: () => {
+      window.location.href = "https://www.instagram.com/madhuryahait/";
+      return null; // or an empty component
+    },
+  },
+  {
+    path: '/li/',
+    component: () => {
+      window.location.href = "https://www.linkedin.com/in/madhurya-hait-b8128017a/";
+      return null; // or an empty component
+    },
+  },
+  {
     path: '/tnc/',
     component: TermsAndConditions,
   },

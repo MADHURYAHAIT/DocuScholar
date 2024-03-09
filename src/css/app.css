@@ -32,6 +32,24 @@
     .navbar-inner {
         padding: 18px;
     }
+
+    .card{
+        padding: 40px 80px;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        padding: 10px;
+    }
+    .grid-container h1{
+        padding-top: 25%;
+        font-size: 35px;
+    }
+    .grid-item {
+
+        text-align: center;
+      }
 }
 
 
