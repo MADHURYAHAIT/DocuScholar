@@ -13,6 +13,7 @@ import RequestAndLoad from '../pages/request-and-load.jsx';
 import NotFoundPage from '../pages/404.jsx';
 import MessagesPage from '../pages/messages.jsx';
 import ReachUs from '../pages/contact.jsx';
+import Credits from '../pages/credit.jsx';
 
 var routes = [
   {
@@ -30,6 +31,10 @@ var routes = [
   {
     path: '/contact/',
     component: ReachUs,
+  },
+  {
+    path: '/credit/',
+    component: Credits,
   },
   {
     path: '/description/',

@@ -43,7 +43,7 @@ const TermsAndConditions = () => {
 
           <h3>Contact Information</h3>
 
-          If you have any questions or concerns regarding these terms, please contact us at [contact@email.com].
+          If you have any questions or concerns regarding these terms, please contact us at haitmadhurya@gmail.com.
 
           <h3>Changes to Terms</h3>
 
@@ -51,7 +51,7 @@ const TermsAndConditions = () => {
 
           <h3>Effective Date</h3>
 
-          These terms and conditions are effective as of [Date].
+          These terms and conditions are effective as of 10 March 2024.
 
           <h3>Thank you for choosing DocuScholar!</h3>
         </Block>
