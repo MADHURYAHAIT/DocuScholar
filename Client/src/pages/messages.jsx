@@ -55,9 +55,9 @@ const MessagesPage =() => {
     'I am not sure',
     'And what about you?',
     'May be ;)',
-    'Ami Tomake BHalo Basi',
+    'I may not know',
+    'How are you ?',
     'Hari Bol',
-    'Wtf kkrh ho',
     'Lorem ipsum dolor sit amet, consectetur',
     'What?',
     

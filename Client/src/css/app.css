@@ -20,9 +20,26 @@
     text-align: center;
 
 }
+.grid-container {
+   align-items: center;
+   display: flex;
+   flex-direction: column;
+
+}
+
+.grid-item h1{
+    font-size: 37px;
+}
+
+.grid-item3 {
+    text-align: center !important;
+    padding-bottom: 60px;
+    padding-top: 7px;
+}
 /* .messages-content, .messages{
     background:black;
 }
+
 
 .message-name{
     color: white;
@@ -43,13 +60,17 @@
         padding: 10px;
     }
     .grid-container h1{
-        padding-top: 25%;
+        padding: 10px;
         font-size: 35px;
     }
     .grid-item {
 
         text-align: center;
       }
+    .grid-item3{
+        padding-left: 25px;
+        padding-right: 25px;
+    }
 }
 
 
