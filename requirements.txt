@@ -4,3 +4,6 @@ langchain
 PyPDF2
 #faiss-c
 langchain_google_genai
+cors
+express
+mongoose

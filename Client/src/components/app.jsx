@@ -39,12 +39,43 @@ const MyApp = () => {
   const [password, setPassword] = useState('');
 
 
-  const toggleDarkMode = () => {
-    setDarkMode(!isDarkMode);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(email, phone, password);
+    
+    try {
+      const response = await axios.post('http://localhost:3000/login', {
+        email,
+        phone,
+        password,
+        fnm,
+        lnm,
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (response.status === 200) {
+        const data = response.data;
+        setMsg(data.msg); 
+        console.log(data);
+        // Assuming your backend sends a response with a message
+        // Handle the success, show an alert or redirect to a different page
+      } else {
+        const errorData = response.data;
+        setMsg(errorData.error); // Assuming your backend sends an error message
+        // Handle the error, show an alert or provide feedback to the user
+      }
+    } catch (error) {
+      console.error('Error during signup:', error.message);
+    }
   };
+  
   // Framework7 Parameters
   const f7params = {
-    name: 'DocTalk', // App name
+    name: 'DocuScholar', // App name
     id: 'com.doctalk.id',
     theme: 'auto',
 
@@ -207,7 +238,7 @@ const MyApp = () => {
         <Page loginScreen>
           <LoginScreenTitle style={{fontSize:'36px', paddingBottom:'15px'}}><FaFilePdf className='ninja'/> DocuScholar</LoginScreenTitle>
           <form onSubmit={(e) => { e.preventDefault(); handleSubmit(e); }}>
-            <List form>
+            <List>
               <ListInput
                 type="email"
                 name="email"
@@ -225,7 +256,7 @@ const MyApp = () => {
               ></ListInput>
             </List>
             <div className='buttonBox' >
-                <Button  fill style={{ width:'240px'}}type="submit"><h2>Login</h2></Button>
+                <Button  fill style={{ width:'240px',fontSize:'10px'}}type="submit"><h2>Login</h2></Button>
             </div>
           </form>
         
@@ -235,7 +266,7 @@ const MyApp = () => {
           </div>
         <List>
               <BlockFooter>
-              <p style={{}}>Join DocuScholar to chat with Ai to get your desired <br/>answers just at a call. </p>
+              <p >Join DocuScholar to chat with Ai to get your<br/> desired answers just at a call. </p>
               </BlockFooter>
             </List>
    

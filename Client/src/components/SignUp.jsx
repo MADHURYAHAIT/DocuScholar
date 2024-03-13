@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaFilePdf } from "react-icons/fa";
+
 import {
   f7,
   Page,
@@ -13,65 +14,74 @@ import {
   BlockFooter,
   
 } from 'framework7-react';
+import axios from 'axios';
 
-import { GiChestnutLeaf } from "react-icons/gi";
+
 const SignUp = () => {
-  
+
   const [msg,setMsg] = useState('');
 
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [cpassword, setCpassword] = useState('');
   const [fnm, setFnm] = useState('');
   const [lnm, setLnm] = useState('');
 
   const alertLoginData = () => {
-    f7.dialog.alert('Data Submitted !', () => {
+    f7.dialog.alert('Data Submitted ! Go ahead and login.', () => {
+    f7.loginScreen.close();
+    });
+  };
+  const alertLoginData1 = () => {
+    f7.dialog.alert('Data Submission Error ! Please try again.', () => {
     f7.loginScreen.close();
     });
   };
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    // try {
-      
-    //   const response = await fetch('http://192.168.133.239:8000/signup', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/x-www-form-urlencoded',
-    //       // 'application/x-www-form-urlencoded'
-    //     },
-    //     body: new URLSearchParams({
-    //       email,
-    //       phone,
-    //       password,
-    //       cpassword,
-    //       fnm,
-    //       lnm,
-    //       dob,
-    //     }),
-    //   });
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log(email, phone, password);
+  
+  try {
+    const response = await axios.post('http://localhost:3000/signup', {
+      email,
+      phone,
+      password,
+      fnm,
+      lnm,
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     setMsg(data['msg']); 
-    //     console.log(data);
-    //     // Assuming your backend sends a response with a message
-    //     // Handle the success, show an alert or redirect to a different page
-    //   } else {
-    //     const errorData = await response.json();
-    //     setMsg(errorData.error); // Assuming your backend sends an error message
-    //     // Handle the error, show an alert or provide feedback to the user
-    //   }
-    // } catch (error) {
-    //   console.error('Error during signup:', error.message);
-    // }
-  };
-
-
+    if (response.status === 200) {
+      const data = response.data;
+      localStorage.setItem('user',JSON.stringify(data)); 
+      setMsg(data.msg); 
+      console.log(data);
+      alertLoginData();
+      setEmail('');
+      setPhone('');
+      setPassword('');
+      setFnm('');
+      setLnm('');
+      // Assuming your backend sends a response with a message
+      // Handle the success, show an alert or redirect to a different page
+    } else {
+      const errorData = response.data;
+      setMsg(errorData.error);
+     
+      alertLoginData1();// Assuming your backend sends an error message
+      // Handle the error, show an alert or provide feedback to the user
+    }
+  } catch (error) {
+    console.error('Error during signup:', error.message);
+  }
+  
+};
 
 
 
@@ -82,67 +92,58 @@ const SignUp = () => {
               <LoginScreenTitle style={{fontSize:"35px"}}><FaFilePdf className='ninja'/> DocuScholar</LoginScreenTitle>
              
               <form onSubmit={handleSubmit}>
-                <List form>
-                  <ListInput
-                    type="email"
-                    name="email"
-                    placeholder="Your email"
-                    value={email}
-                    onInput={(e) => setEmail(e.target.value)}
-                  ></ListInput>
+                <List >
+                    <ListInput
+                        type="text"
+                        name="fnm"
+                        placeholder="Enter first name"
+                        value={fnm}
+                        onInput={(e) => setFnm(e.target.value)}
+                    ></ListInput>
 
-                <ListInput
-                    type="number"
-                    name="phone"
-                    placeholder="Enter your phone number"
-                    value={phone}
-                    onInput={(e) => setPhone(e.target.value)}
-                  ></ListInput>
+                    <ListInput
+                        type="text"
+                        name="lnm"
+                        placeholder="Enter last name"
+                        value={lnm}
+                        onInput={(e) => setLnm(e.target.value)}
+                    ></ListInput>
 
-                  <ListInput
-                    type="password"
-                    name="password"
-                    placeholder="Your password"
-                    value={password}
-                    onInput={(e) => setPassword(e.target.value)}
-                  ></ListInput>
+                    <ListInput
+                        type="number"
+                        name="phone"
+                        placeholder="Enter your phone number"
+                        value={phone}
+                        onInput={(e) => setPhone(e.target.value)}
+                    ></ListInput>
 
+                    <ListInput
+                        type="email"
+                        name="email"
+                        placeholder="Your email"
+                        value={email}
+                        onInput={(e) => setEmail(e.target.value)}
+                    ></ListInput>
 
-                  <ListInput
-                    type="text"
-                    name="fnm"
-                    placeholder="Enter first name"
-                    value={fnm}
-                    onInput={(e) => setFnm(e.target.value)}
-                  ></ListInput>
-
-                  <ListInput
-                    type="text"
-                    name="lnm"
-                    placeholder="Enter last name"
-                    value={lnm}
-                    onInput={(e) => setLnm(e.target.value)}
-                  ></ListInput>
-
-
+                    <ListInput
+                        type="password"
+                        name="password"
+                        placeholder="Your password"
+                        value={password}
+                        onInput={(e) => setPassword(e.target.value)}
+                    ></ListInput>
 
                 </List>
 
                 <div className='buttonBox' >
-                    <Button type="submit" fill style={{  width:'240px'}} onClick={alertLoginData}><h2>Sign Up</h2></Button>
+                    <Button type="submit" fill style={{  width:'240px'}} ><h3>Sign Up</h3></Button>
                 </div>
-              </form>
-              {/* <div className='buttonBox'>
-             
 
-                <Button><p style={{color:'white',fontSize:'15px'}}>
-Log in to your account</p></Button>
-                 
-              </div> */}
-            <List>
-                 
+              </form>
+ 
+                <List>
                   <BlockFooter>
-                    <p>After you create your account, you can Login</p>
+                    <p>After you create your account, you can go ahead and Login</p>
                   </BlockFooter>
                 </List>
              

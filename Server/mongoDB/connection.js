@@ -1,10 +1,10 @@
 
 import mongoose from "mongoose";
+import { MongoClient, ServerApiVersion } from "mongodb";
 mongoose.connect("mongodb+srv://mady:abc12345@cluster0.i5niiwg.mongodb.net/DocuScholar?retryWrites=true&w=majority");
 console.log("Connection file running");
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-// const client = new MongoClient(uri, {
+// const client = new MongoClient('mongodb+srv://mady:abc12345@cluster0.i5niiwg.mongodb.net/DocuScholar?retryWrites=true&w=majority', {
 //   serverApi: {
 //     version: ServerApiVersion.v1,
 //     strict: true,
