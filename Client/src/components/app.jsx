@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
+import { FaFilePdf } from "react-icons/fa";
+import SignUp from './Signup';
 import {
   f7,
   f7ready,
@@ -30,9 +31,11 @@ import {
 import routes from '../js/routes';
 import store from '../js/store';
 
+
 const MyApp = () => {
   // Login screen demo data
-  const [username, setUsername] = useState('');
+  const[isAuthenticated,setIsAuthenticated]=useState(false)
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
 
@@ -47,56 +50,53 @@ const MyApp = () => {
 
 
 
-
       // App store
       store: store,
       // App routes
       routes: routes,
   };
-  const alertLoginData = () => {
-    f7.dialog.alert('Username: ' + username + '<br>Password: ' + password, () => {
-      f7.loginScreen.close();
-    });
-  }
+  // const alertLoginData = () => {
+  //   f7.dialog.alert('Username: ' + username + '<br>Password: ' + password, () => {
+  //     f7.loginScreen.close();
+  //   });
+  // }
   f7ready(() => {
 
 
     // Call F7 APIs here
   });
-
+  if (isAuthenticated){
   return (
     <App { ...f7params }>
         
 
-        {/* Left panel with cover effect*/}
+
         <Panel left cover dark>
           <View>
             <Page>
               <Navbar title="Left Panel"/>
               <Block>Left panel content goes here</Block>
-              {/* <a href="/form/">form</a>
-          <a href="">2</a>
-          <a href="">3</a> */}
+
             <Button fill popupOpen=".demo-popup-push">Edit Profile</Button>
             <List strong inset dividersIos>
 
-<ListItem
-    title="Description"
-    link="/form/"
-    />
-  <ListItem
-    title="Our Team"
-    link="/team/"
-    />
-  <ListItem
-    title="Contact Us"
-    link="/contact/"
-    />
-  <ListItem
-    title="Terms & Conditions"
-    link="/tnc/"
-    />
-</List>
+          <ListItem
+              title="Description"
+              link="/form/"
+              />
+            <ListItem
+              title="Our Team"
+              link="/team/"
+              />
+            <ListItem
+              title="Contact Us"
+              link="/contact/"
+              />
+            <ListItem
+              title="Terms & Conditions"
+              link="/tnc/"
+              />
+          </List>
             </Page>
           </View>
         </Panel>
@@ -110,8 +110,7 @@ const MyApp = () => {
               <Block>Right panel content goes here</Block>
             
               <a href="/form/">form</a><br/>
-          <a href="">2</a>
-          <a href="">3</a>
+         
               <List strong inset dividersIos>
 
                 <ListItem
@@ -196,19 +195,27 @@ const MyApp = () => {
          
         </View>
       </Popup>
+    </App>
+  )}
+  else{
+    return(
+      <App { ...f7params }>
+      <>  
+        
+      <div className='login'>   
 
-      <LoginScreen id="my-login-screen">
-        <View>
-          <Page loginScreen>
-            <LoginScreenTitle>Login</LoginScreenTitle>
+        <Page loginScreen>
+          <LoginScreenTitle style={{fontSize:'36px', paddingBottom:'15px'}}><FaFilePdf className='ninja'/> DocuScholar</LoginScreenTitle>
+          <form onSubmit={(e) => { e.preventDefault(); handleSubmit(e); }}>
             <List form>
               <ListInput
-                type="text"
-                name="username"
-                placeholder="Your username"
-                value={username}
-                onInput={(e) => setUsername(e.target.value)}
+                type="email"
+                name="email"
+                placeholder="Your email"
+                value={email}
+                onInput={(e) => setEmail(e.target.value)}
               ></ListInput>
+
               <ListInput
                 type="password"
                 name="password"
@@ -217,16 +224,42 @@ const MyApp = () => {
                 onInput={(e) => setPassword(e.target.value)}
               ></ListInput>
             </List>
-            <List>
-              <ListButton title="Sign In" onClick={() => alertLoginData()} />
+            <div className='buttonBox' >
+                <Button  fill style={{ width:'240px'}}type="submit"><h2>Login</h2></Button>
+            </div>
+          </form>
+        
+
+          <div className='buttonBox'>
+            <Button style={{margin:'8px',width:'240px'}} popupOpen=".demo-popup-push"><p style={{fontSize:'16px', fontWeight:'700'}}>Create a New Account</p></Button>
+          </div>
+        <List>
               <BlockFooter>
-                Some text about login information.<br />Click "Sign In" to close Login Screen
+              <p style={{}}>Join DocuScholar to chat with Ai to get your desired <br/>answers just at a call. </p>
               </BlockFooter>
             </List>
+   
+
+    <Popup push className="demo-popup-push">
+        <View>
+          <Page>
+            <Navbar  transparent>
+              <NavRight>
+                <Link popupClose>Close</Link>
+              </NavRight>
+            </Navbar>
+           
+            <SignUp/>
+          
           </Page>
         </View>
-      </LoginScreen>
+      </Popup>
+      </Page>
+      </div>
+    </>
     </App>
-  )
+      
+    )
+  }
 }
 export default MyApp;

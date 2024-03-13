@@ -28,6 +28,7 @@
 }
 
 .grid-item h1{
+    color:#f8398c;
     font-size: 37px;
 }
 
@@ -35,6 +36,14 @@
     text-align: center !important;
     padding-bottom: 60px;
     padding-top: 7px;
+}
+
+
+.buttonBox{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 /* .messages-content, .messages{
     background:black;
