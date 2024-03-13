@@ -1,14 +1,14 @@
 
 import express from "express";
-import './mongoDB/connection.js'; 
-import messageModel from "./mongoDB/messageModel.js";
+import  './mongoDB/connection.js'; 
+//import messageModel from "./models/messageModel.js";
 import bodyParser from "body-parser";
 
-
-const app = express();
 const port = 3000; 
+const app = express();
+app.use(express.json());
 app.post("/submit", (req, res) => {
-    console.log(req.body);
+    res.log(req.body);
     res.send("Data received ...");
 });
 

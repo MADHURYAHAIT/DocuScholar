@@ -1,8 +1,7 @@
 
 import mongoose from "mongoose";
-mongoose.connect("mongodb+srv://mady:abc123456@cluster0.i5niiwg.mongodb.net/sample_supplies?retryWrites=true&w=majority");
-
-
+mongoose.connect("mongodb+srv://mady:abc12345@cluster0.i5niiwg.mongodb.net/DocuScholar?retryWrites=true&w=majority");
+console.log("Connection file running");
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 // const client = new MongoClient(uri, {
