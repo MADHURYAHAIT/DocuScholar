@@ -68,14 +68,10 @@ const handleSubmit = async (e) => {
       setPassword('');
       setFnm('');
       setLnm('');
-      // Assuming your backend sends a response with a message
-      // Handle the success, show an alert or redirect to a different page
     } else {
       const errorData = response.data;
       setMsg(errorData.error);
-     
-      alertLoginData1();// Assuming your backend sends an error message
-      // Handle the error, show an alert or provide feedback to the user
+      alertLoginData1();
     }
   } catch (error) {
     console.error('Error during signup:', error.message);

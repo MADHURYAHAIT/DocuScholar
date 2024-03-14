@@ -35,21 +35,12 @@ app.post("/signup", async (req, res) => {
         res.status(500).send("Error occurred during signup");
     }
 });
-app.post("/message", async (req, res) => {
-    try {
-        // let user = new Users(req.body);
-        // let result = await user.save();
-        console.log(req.body);
-        //res.send(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error occurred during signup");
-    }
-});
 
 // Endpoint to handle user login
 app.post("/login", async (req, res) => {
+
     try {
+        
         if (req.body.email && req.body.password) {
             let user = await Users.findOne(req.body);
             if (user) {
@@ -66,6 +57,24 @@ app.post("/login", async (req, res) => {
         res.status(500).send("Error occurred during login");
     }
 });
+
+app.post("/message", async (req, res) => {
+    try {
+
+        // let user = new Users(req.body);
+        // let result = await user.save();
+        req.body['messagesDataServer'].forEach(async (element) => {
+            let chamt= element;
+            console.log(chamt);
+        });
+        //res.send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error occurred during signup");
+    }
+});
+
+
 
 app.listen(port, hostname, () => {
     console.log(`Server is running on http://${hostname}:${port}`);

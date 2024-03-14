@@ -23,10 +23,8 @@ import FileUploadComponent from './FileUploadComponent';
 
 
 const MessagesPage =() => {
-
+  const [email,setEmail]=useState(localStorage.getItem('email'));
   const sendMsgToServer = async () => {
-
-
     
     try {
       const response = await axios.post( 'http://0.0.0.0:3000/message', {
@@ -209,6 +207,7 @@ const MessagesPage =() => {
     if (text.length) {
       messagesToSend.push({
         name:'Me',
+        email,
         text,
       });
     }
@@ -255,6 +254,7 @@ const MessagesPage =() => {
           ...messagesToSend,
           {
             name: person.name,
+            email,
             text: answer,
           },
         ]);

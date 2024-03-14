@@ -58,7 +58,7 @@ const MyApp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(email, password);
-    
+    s
     try {
       const response = await axios.post( 'http://0.0.0.0:3000/login', {
         email,
@@ -74,6 +74,7 @@ const MyApp = () => {
         const data = response.data;
         if (data.email === email && data.password === password)
         {
+          localStorage.setItem('email',data.email);
           setIsAuthenticated(true);
         localStorage.setItem('isAuthenticated',true);
         }
