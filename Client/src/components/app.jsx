@@ -11,7 +11,6 @@ import {
   Popup,
   Page,
   Navbar,
-  
   Toolbar,
   NavRight,
   Link,
@@ -30,11 +29,27 @@ import {
 
 import routes from '../js/routes';
 import store from '../js/store';
+import axios from 'axios';
 
+const logout=()=>{
+  localStorage.clear();
+  window.location.reload();
+}
 
 const MyApp = () => {
   // Login screen demo data
-  const[isAuthenticated,setIsAuthenticated]=useState(false)
+  
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('isAuthenticated'));
+
+ console.log(localStorage.getItem('isAuthenticated'));
+  useEffect(() => {
+  if (localStorage.getItem('isAuthenticated') == true ){
+    setIsAuthenticated(true);
+  }
+}, []);
+  
+
+ 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -42,15 +57,13 @@ const MyApp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, phone, password);
+    console.log(email, password);
     
     try {
-      const response = await axios.post('http://localhost:3000/login', {
+      const response = await axios.post( 'http://0.0.0.0:3000/login', {
         email,
-        phone,
         password,
-        fnm,
-        lnm,
+
       }, {
         headers: {
           'Content-Type': 'application/json'
@@ -59,14 +72,17 @@ const MyApp = () => {
   
       if (response.status === 200) {
         const data = response.data;
-        setMsg(data.msg); 
+        if (data.email === email && data.password === password)
+        {
+          setIsAuthenticated(true);
+        localStorage.setItem('isAuthenticated',true);
+        }
+
         console.log(data);
-        // Assuming your backend sends a response with a message
-        // Handle the success, show an alert or redirect to a different page
+
       } else {
         const errorData = response.data;
-        setMsg(errorData.error); // Assuming your backend sends an error message
-        // Handle the error, show an alert or provide feedback to the user
+        console.log(errorData.error); 
       }
     } catch (error) {
       console.error('Error during signup:', error.message);
@@ -96,38 +112,30 @@ const MyApp = () => {
 
     // Call F7 APIs here
   });
-  if (isAuthenticated){
+  console.log(isAuthenticated);
+  if ( isAuthenticated){
   return (
     <App { ...f7params }>
         
 
 
-        <Panel left cover dark>
+        <Panel left cover >
           <View>
             <Page>
-              <Navbar title="Left Panel"/>
-              <Block>Left panel content goes here</Block>
+              <Navbar title="Profile"/>
+              <Block strong inset>
+                <Block className='imgblk'>
+                  <img src="/images/me.jpg" className='profimg' width="100"  />
+             
+                </Block>
+                <p>name : Madhurya Hait</p>
+                <p>email : haitmadhurya@gmail.com</p>
+                <p>phone : 9931111589</p>
 
-            <Button fill popupOpen=".demo-popup-push">Edit Profile</Button>
-            <List strong inset dividersIos>
+              </Block>
 
-          <ListItem
-              title="Description"
-              link="/form/"
-              />
-            <ListItem
-              title="Our Team"
-              link="/team/"
-              />
-            <ListItem
-              title="Contact Us"
-              link="/contact/"
-              />
-            <ListItem
-              title="Terms & Conditions"
-              link="/tnc/"
-              />
-          </List>
+            <Button  onClick={()=>logout()}><h3 style={{color:'red'}}>Sign out</h3></Button>
+     
             </Page>
           </View>
         </Panel>
@@ -137,10 +145,10 @@ const MyApp = () => {
         <Panel right reveal>
           <View>
             <Page>
-              <Navbar title="Right Panel"/>
-              <Block>Right panel content goes here</Block>
+              <Navbar title="User Info"/>
+              <Block>email:haitmadhurya@gmail.com</Block>
             
-              <a href="/form/">form</a><br/>
+          
          
               <List strong inset dividersIos>
 

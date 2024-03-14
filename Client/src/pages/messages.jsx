@@ -1,4 +1,4 @@
-
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { FaFilePdf } from "react-icons/fa";
 
@@ -20,7 +20,38 @@ import {
 } from 'framework7-react';
 import DateTimeComponent from './DateTimeComp';
 import FileUploadComponent from './FileUploadComponent';
+
+
 const MessagesPage =() => {
+
+  const sendMsgToServer = async () => {
+
+
+    
+    try {
+      const response = await axios.post( 'http://0.0.0.0:3000/message', {
+        messagesDataServer,
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (response.status === 200) {
+        const data = response.data;
+  
+        console.log(data);
+  
+      } else {
+        const errorData = response.data;
+        console.log(errorData.error); 
+      }
+    } catch (error) {
+      console.error('Error during signup:', error.message);
+    }
+  };
+
+
   const handleFilePickerChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -106,6 +137,7 @@ const MessagesPage =() => {
 
 
   ]);
+  const[messagesDataServer,setMessagesDataServer]=useState([]);
 
   const responseInProgress = useRef(false);
   const messagebar = useRef(null);
@@ -165,14 +197,18 @@ const MessagesPage =() => {
   };
   const sendMessage = () => {
     const text = messageText.replace(/\n/g, '<br>').trim();
+
+    sendMsgToServer();
     const messagesToSend = [];
     attachments.forEach((attachment) => {
       messagesToSend.push({
+      
         image: attachment,
       });
     });
     if (text.length) {
       messagesToSend.push({
+        name:'Me',
         text,
       });
     }
@@ -182,6 +218,7 @@ const MessagesPage =() => {
     setAttachments([]);
     setSheetVisible(false);
     setMessagesData([...messagesData, ...messagesToSend]);
+    setMessagesDataServer([...messagesDataServer, ...messagesToSend]);
     setMessageText('');
 
     // Focus area
@@ -201,6 +238,7 @@ const MessagesPage =() => {
       });
       setTimeout(() => {
         setTypingMessage(null);
+        
         setMessagesData([
           ...messagesData,
           ...messagesToSend,
@@ -211,6 +249,16 @@ const MessagesPage =() => {
             avatar: person.avatar,
           },
         ]);
+
+        setMessagesDataServer([
+          ...messagesDataServer,
+          ...messagesToSend,
+          {
+            name: person.name,
+            text: answer,
+          },
+        ]);
+        console.log(messagesDataServer);
         responseInProgress.current = false;
       }, 1000); //typing time
     }, 1000);
@@ -227,7 +275,14 @@ const MessagesPage =() => {
       {/* PdfMassiah */}
       
         <NavRight>
-          <Link iconIos="f7:menu" iconMd="material:menu" className='menu'  popupOpen=".demo-popup-push" /> 
+        <img
+          src="/images/me.jpg"
+          className="profile-img"
+          alt="User Image"
+          width="30"
+          onClick={() => f7.panel.open('left')}
+         /> 
+        <Link iconIos="f7:menu" iconMd="material:menu" className='menu'  popupOpen=".demo-popup-push" /> 
           {/* panelOpen="left" */}
         </NavRight>
       </Navbar>
