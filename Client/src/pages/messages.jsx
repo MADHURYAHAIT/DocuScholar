@@ -22,7 +22,29 @@ import FileUploadComponent from './FileUploadComponent';
 
 
 const MessagesPage =() => {
+  const [messagesFetched, setMessagesFetched] = useState([]);
+ 
+  const [email,setEmail]=useState(localStorage.getItem('email'));
 
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.post('http://0.0.0.0:3000/fetchmessages', {
+        email, 
+      });
+      if (response.status === 200) {
+        const data = response.data;
+        console.log("The data=>");
+        setMessagesFetched(data);
+      } else {
+        console.log(response.data.error); // Log any error response
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error.message);
+    }
+  };
+  useEffect(() => {
+  fetchMessages();
+}, [email]);
   const[messagesDataServer,setMessagesDataServer]=useState([]);
   if( messagesDataServer != []){
   useEffect(() => {
@@ -103,15 +125,15 @@ const MessagesPage =() => {
   ];
   
   const img='/images/profile.jpg';
-  const [email,setEmail]=useState(localStorage.getItem('email'));
+  
   const [attachments, setAttachments] = useState([]);
   const [sheetVisible, setSheetVisible] = useState(false);
   const [typingMessage, setTypingMessage] = useState(null);
   const [messageText, setMessageText] = useState('');
-  const [messagesData, setMessagesData] = useState([
+  let a =[
     
     {
-      name: 'DocuScholar',
+      name: 'DocuScholar', 
       type: 'received',
       text: 'Hi 🌻 beautiful, This is DocuScholar, made by Madhurya.',
       avatar: `${img}`,
@@ -119,7 +141,6 @@ const MessagesPage =() => {
     },
     {
       name: 'DocuScholar',
-      setTimeout: 1000,
       type: 'received',
       text: 'I am here to help you with your queries, just submit your queries in the left panel and I will find you correct answers through it. 🥀',
       avatar: `${img}`,
@@ -130,20 +151,54 @@ const MessagesPage =() => {
       text: 'How can I help you today? 🙏🏻',
       avatar:  `${img}`,
      
+    },    
+  ]
 
-    },
-    // {
-    //   name: 'DocuScholar',
-    //   type: 'received',
-    //   footer: 'Just now',
-    //   avatar: `${img}`,
-    //   image: 'https://i.pinimg.com/736x/2a/3f/94/2a3f94b2a43d4e72bc87a56ef0e45a10.jpg',
-    // },
+  const [messagesData, setMessagesData] = useState(a);
+
+   
+   
+    const [newFetchedMsg, setNewFetchedMsg] = useState([]);
+
+    useEffect(() => {
+
+      setNewFetchedMsg(
+        messagesFetched.map((message, index) => (
+        {
+        name: message.bot ? 'DocuScholar' : null,
+        type: message.bot ? 'received' : 'sent',
+        text: message.text,
+        avatar: message.bot ? `${img}` : null,
+      })));
+
+     
+      
+    }, [messagesFetched]);
     
 
+  useEffect(()=>{
+    let b=[...messagesData,...newFetchedMsg];
+      console.log(...b);
+      setMessagesData([...messagesData,...newFetchedMsg]);
 
-  ]);
+      localStorage.setItem('TotalMsgData', JSON.stringify(b));
+}, []);
+    
+    
+
   
+    
+    useEffect(() => {
+      // Retrieve messagesData from local storage
+      const storedMessages = localStorage.getItem('messagesData');
+      if (storedMessages) {
+        setMessagesData(JSON.parse(storedMessages));
+      }
+    }, []);
+
+
+
+
   const responseInProgress = useRef(false);
   const messagebar = useRef(null);
 

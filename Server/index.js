@@ -69,16 +69,31 @@ app.post("/message", async (req, res) => {
             res.send(result);
         }
 
-        // let user = new Users(req.body);
-        // let result = await user.save();
-        // req.body['messagesDataServer'].forEach(async (element) => {
-        //     let chamt= element;
-        //     console.log(chamt);
-        // });
-        //res.send(result);
     } catch (error) {
         console.error(error);
         res.status(500).send("Error occurred during signup");
+    }
+});
+
+
+app.post("/fetchmessages", async (req, res) => {
+    try {
+        const email  = req.body;
+        console.log("getting email",email);
+        if (!email) {
+            return res.status(400).send({ error: "Email is required" });
+        }
+        let user = await Users.findOne(req.body);
+      
+        if (!user) {
+            return res.status(404).send({ error: "User not found" });
+        }
+
+        const userMessages = await messages.find(req.body);
+        res.json(userMessages);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error occurred during message fetching");
     }
 });
 
