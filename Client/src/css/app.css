@@ -83,6 +83,9 @@
 .message-name{
     color: white;
 } */
+h1{
+    color:black !important;
+}
 
 @media screen and (min-width: 700px) {
     .messages{

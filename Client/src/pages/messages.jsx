@@ -44,7 +44,7 @@ const MessagesPage =() => {
   };
   useEffect(() => {
   fetchMessages();
-}, [email]);
+}, []);
   const[messagesDataServer,setMessagesDataServer]=useState([]);
   if( messagesDataServer != []){
   useEffect(() => {
@@ -336,7 +336,7 @@ const MessagesPage =() => {
     }, 1000);
   };
 
-
+  console.log("JSR",JSON.parse(localStorage.getItem('TotalMsgData')));
 
 
 
@@ -407,22 +407,26 @@ const MessagesPage =() => {
           <DateTimeComponent/>
         </MessagesTitle>
 
-        {messagesData.map((message, index) => (
-          <Message
-            key={index}
-            type={message.type}
-            image={message.image}
-            name={message.name}
-            avatar={message.avatar}
-            first={isFirstMessage(message, index)}
-            last={isLastMessage(message, index)}
-            tail={isTailMessage(message, index)}
-          >
-            {message.text && (
-              <span slot="text" dangerouslySetInnerHTML={{ __html: message.text }} />
-            )}
-          </Message>
-        ))}
+         {localStorage.getItem('TotalMsgData') ? (
+      JSON.parse(localStorage.getItem('TotalMsgData')).map((message, index) => (
+        <Message
+          key={index}
+          type={message.type}
+          image={message.image}
+          name={message.name}
+          avatar={message.avatar}
+          first={isFirstMessage(message, index)}
+          last={isLastMessage(message, index)}
+          tail={isTailMessage(message, index)}
+        >
+          {message.text && (
+            <span slot="text" dangerouslySetInnerHTML={{ __html: message.text }} />
+          )}
+        </Message>
+      ))
+    ) : (
+      <p>No messages available</p>
+    )}
         {typingMessage && (
           <Message
             type="received"
