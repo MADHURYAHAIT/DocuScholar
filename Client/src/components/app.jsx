@@ -58,7 +58,7 @@ const MyApp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(email, password);
-    s
+    
     try {
       const response = await axios.post( 'http://0.0.0.0:3000/login', {
         email,

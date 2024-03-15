@@ -1,6 +1,7 @@
 import express from "express";
 import './mongoDB/connection.js'; 
 import Users from './models/user.js';
+import messages from "./models/messageModel.js";
 import cors from 'cors';
 
 const hostname = '0.0.0.0'; 
@@ -44,7 +45,8 @@ app.post("/login", async (req, res) => {
         if (req.body.email && req.body.password) {
             let user = await Users.findOne(req.body);
             if (user) {
-                res.send(user);
+                res.send(req.body);
+                console.log(user)
                 console.log("Login Data received");
             } else {
                 res.status(401).send({ result: "Invalid Email or Password" });
@@ -60,13 +62,19 @@ app.post("/login", async (req, res) => {
 
 app.post("/message", async (req, res) => {
     try {
+        if ((req.body['messagesDataServer'])[0]!=null){ 
+            console.log((req.body['messagesDataServer'])[0]);
+            let msg = new messages((req.body)['messagesDataServer'][0]);
+            let result = await msg.save();
+            res.send(result);
+        }
 
         // let user = new Users(req.body);
         // let result = await user.save();
-        req.body['messagesDataServer'].forEach(async (element) => {
-            let chamt= element;
-            console.log(chamt);
-        });
+        // req.body['messagesDataServer'].forEach(async (element) => {
+        //     let chamt= element;
+        //     console.log(chamt);
+        // });
         //res.send(result);
     } catch (error) {
         console.error(error);
@@ -76,6 +84,6 @@ app.post("/message", async (req, res) => {
 
 
 
-app.listen(port, hostname, () => {
+app.listen(port, () => {
     console.log(`Server is running on http://${hostname}:${port}`);
 });

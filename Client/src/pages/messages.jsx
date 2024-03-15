@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { FaFilePdf } from "react-icons/fa";
-
 import {
   Navbar,
   NavRight,
@@ -23,9 +22,14 @@ import FileUploadComponent from './FileUploadComponent';
 
 
 const MessagesPage =() => {
-  const [email,setEmail]=useState(localStorage.getItem('email'));
+
+  const[messagesDataServer,setMessagesDataServer]=useState([]);
+  if( messagesDataServer != []){
+  useEffect(() => {
   const sendMsgToServer = async () => {
-    
+   
+
+    console.log(messagesDataServer); 
     try {
       const response = await axios.post( 'http://0.0.0.0:3000/message', {
         messagesDataServer,
@@ -47,8 +51,11 @@ const MessagesPage =() => {
     } catch (error) {
       console.error('Error during signup:', error.message);
     }
-  };
-
+    
+  } 
+  sendMsgToServer();
+}, [messagesDataServer]);
+  }
 
   const handleFilePickerChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -89,17 +96,18 @@ const MessagesPage =() => {
     'Hari Bol',
     'Lorem ipsum dolor sit amet, consectetur',
     'What?',
-    
     'Are you sure?',
     'Of course',
     'Need to think about it',
     'Amazing!!!',
   ];
+  
+  const img='/images/profile.jpg';
+  const [email,setEmail]=useState(localStorage.getItem('email'));
   const [attachments, setAttachments] = useState([]);
   const [sheetVisible, setSheetVisible] = useState(false);
   const [typingMessage, setTypingMessage] = useState(null);
   const [messageText, setMessageText] = useState('');
-  const img='/images/profile.jpg';
   const [messagesData, setMessagesData] = useState([
     
     {
@@ -135,8 +143,7 @@ const MessagesPage =() => {
 
 
   ]);
-  const[messagesDataServer,setMessagesDataServer]=useState([]);
-
+  
   const responseInProgress = useRef(false);
   const messagebar = useRef(null);
 
@@ -181,6 +188,7 @@ const MessagesPage =() => {
     attachments.splice(index, 1);
     setAttachments([...attachments]);
   };
+  //for image
   const handleAttachment = (e) => {
     const index = f7.$(e.target).parents('label.checkbox').index();
     const image = images[index];
@@ -193,31 +201,42 @@ const MessagesPage =() => {
     }
     setAttachments([...attachments]);
   };
-  const sendMessage = () => {
+  const  sendMessage =  () => {
     const text = messageText.replace(/\n/g, '<br>').trim();
+   
+     setMessagesDataServer([
+      {
+        email,
+        text,
+        bot:false,
+      },
+    ]);
+   
 
-    sendMsgToServer();
     const messagesToSend = [];
     attachments.forEach((attachment) => {
       messagesToSend.push({
-      
         image: attachment,
       });
     });
+
     if (text.length) {
       messagesToSend.push({
-        name:'Me',
         email,
         text,
+        bot:false,
       });
     }
+   
     if (messagesToSend.length === 0) {
       return;
     }
+
+    
     setAttachments([]);
     setSheetVisible(false);
     setMessagesData([...messagesData, ...messagesToSend]);
-    setMessagesDataServer([...messagesDataServer, ...messagesToSend]);
+
     setMessageText('');
 
     // Focus area
@@ -250,17 +269,15 @@ const MessagesPage =() => {
         ]);
 
         setMessagesDataServer([
-          ...messagesDataServer,
-          ...messagesToSend,
           {
-            name: person.name,
             email,
             text: answer,
+            bot:true,
           },
         ]);
-        console.log(messagesDataServer);
         responseInProgress.current = false;
       }, 1000); //typing time
+      
     }, 1000);
   };
 

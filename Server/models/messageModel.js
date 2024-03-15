@@ -1,21 +1,20 @@
 import mongoose from "mongoose";
 const messageSchema = mongoose.Schema(
   {
-    sender: {
-      type: mongoose.Schema.Types.ObjectId,
+    email: {
+      type: String,
       ref: "User",
     },
-    message: {
-      type: JSON,
+    text: {
+      type: String,
     },
-    chatId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Chat",
+    bot:{
+      type:Boolean,
     },
   },
   {
     timestamps: true,
   }
 );
-const messageModel = mongoose.model("Message", messageSchema);
-export default messageModel;
+const messages = mongoose.model("Message", messageSchema);
+export default messages;
