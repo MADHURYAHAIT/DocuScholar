@@ -23,9 +23,8 @@ import FileUploadComponent from './FileUploadComponent';
 
 const MessagesPage =() => {
   const [messagesFetched, setMessagesFetched] = useState([]);
- 
   const [email,setEmail]=useState(localStorage.getItem('email'));
-
+  //messages fetch
   const fetchMessages = async () => {
     try {
       const response = await axios.post('http://0.0.0.0:3000/fetchmessages', {
@@ -33,7 +32,7 @@ const MessagesPage =() => {
       });
       if (response.status === 200) {
         const data = response.data;
-        console.log("The data=>");
+        console.log("Response Fetch Success !");
         setMessagesFetched(data);
       } else {
         console.log(response.data.error); // Log any error response
@@ -42,51 +41,44 @@ const MessagesPage =() => {
       console.error('Error fetching messages:', error.message);
     }
   };
-  useEffect(() => {
-  fetchMessages();
-}, []);
-  const[messagesDataServer,setMessagesDataServer]=useState([]);
-  if( messagesDataServer != []){
-  useEffect(() => {
-  const sendMsgToServer = async () => {
-   
 
-    console.log(messagesDataServer); 
-    try {
-      const response = await axios.post( 'http://0.0.0.0:3000/message', {
-        messagesDataServer,
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+  useEffect(() => {
+    fetchMessages();
+  }, []);
   
-      if (response.status === 200) {
-        const data = response.data;
-  
-        console.log(data);
-  
-      } else {
-        const errorData = response.data;
-        console.log(errorData.error); 
-      }
-    } catch (error) {
-      console.error('Error during signup:', error.message);
-    }
-    
-  } 
-  sendMsgToServer();
-}, [messagesDataServer]);
+  const[messagesDataServer,setMessagesDataServer]=useState([]);
+
+  if( messagesDataServer != []){
+      useEffect(() => {
+          const sendMsgToServer = async () => {
+         //console.log("message",messagesDataServer); 
+          try {
+            const response = await axios.post( 'http://0.0.0.0:3000/message', {
+              messagesDataServer,
+            }, {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+        
+            if (response.status === 200) {
+              const data = response.data;
+              console.log(data);
+        
+            } else {
+              const errorData = response.data;
+              console.log(errorData.error); 
+            }
+          } catch (error) {
+            console.error('Error during signup:', error.message);
+          }
+          
+        } 
+        sendMsgToServer();
+      }, [messagesDataServer]);
   }
 
-  const handleFilePickerChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      // Do something with the selected file, e.g., add it to attachments
-      const newAttachments = [...attachments, selectedFile];
-      setAttachments(newAttachments);
-    }
-  };
+
   
   const images = [
     'https://cdn.framework7.io/placeholder/cats-300x300-1.jpg',
@@ -156,13 +148,11 @@ const MessagesPage =() => {
 
   const [messagesData, setMessagesData] = useState(a);
 
-   
-   
-    const [newFetchedMsg, setNewFetchedMsg] = useState([]);
+  const [processedFetchedMsg, setProcessedFetchedMsg] = useState([]);
 
     useEffect(() => {
 
-      setNewFetchedMsg(
+      setProcessedFetchedMsg(
         messagesFetched.map((message, index) => (
         {
         name: message.bot ? 'DocuScholar' : null,
@@ -176,17 +166,13 @@ const MessagesPage =() => {
     }, [messagesFetched]);
     
 
-  useEffect(()=>{
-    let b=[...messagesData,...newFetchedMsg];
-      console.log(...b);
-      setMessagesData([...messagesData,...newFetchedMsg]);
+    useEffect(()=>{
+      let b=[...messagesData,...processedFetchedMsg];
+        console.log(...b);
+        setMessagesData([...messagesData,...processedFetchedMsg]);
+        localStorage.setItem('TotalMsgData', JSON.stringify(b));
+    }, [processedFetchedMsg]);
 
-      localStorage.setItem('TotalMsgData', JSON.stringify(b));
-}, []);
-    
-    
-
-  
     
     useEffect(() => {
       // Retrieve messagesData from local storage
@@ -195,7 +181,6 @@ const MessagesPage =() => {
         setMessagesData(JSON.parse(storedMessages));
       }
     }, []);
-
 
 
 
@@ -208,6 +193,7 @@ const MessagesPage =() => {
   const placeholder = () => {
     return attachments.length > 0 ? 'Add comment or Send' : 'Ask me questions';
   };
+
   useEffect(() => {
     f7ready(() => {
       messagebar.current = f7.messagebar.get('.messagebar');
@@ -258,17 +244,17 @@ const MessagesPage =() => {
   };
   const  sendMessage =  () => {
     const text = messageText.replace(/\n/g, '<br>').trim();
-   
-     setMessagesDataServer([
+
+    setMessagesDataServer([
       {
         email,
         text,
         bot:false,
       },
     ]);
-   
 
     const messagesToSend = [];
+
     attachments.forEach((attachment) => {
       messagesToSend.push({
         image: attachment,
@@ -277,9 +263,9 @@ const MessagesPage =() => {
 
     if (text.length) {
       messagesToSend.push({
-        email,
-        text,
-        bot:false,
+
+        text
+    
       });
     }
    
@@ -291,8 +277,7 @@ const MessagesPage =() => {
     setAttachments([]);
     setSheetVisible(false);
     setMessagesData([...messagesData, ...messagesToSend]);
-
-    setMessageText('');
+    //setMessageText('');
 
     // Focus area
     if (text.length) messagebar.current.focus();
@@ -336,7 +321,7 @@ const MessagesPage =() => {
     }, 1000);
   };
 
-  console.log("JSR",JSON.parse(localStorage.getItem('TotalMsgData')));
+  //console.log("JSR",JSON.parse(localStorage.getItem('TotalMsgData')));
 
 
 
@@ -407,8 +392,9 @@ const MessagesPage =() => {
           <DateTimeComponent/>
         </MessagesTitle>
 
-         {localStorage.getItem('TotalMsgData') ? (
-      JSON.parse(localStorage.getItem('TotalMsgData')).map((message, index) => (
+         {
+         localStorage.getItem('TotalMsgData') ? (
+         JSON.parse(localStorage.getItem('TotalMsgData')).map((message, index) => (
         <Message
           key={index}
           type={message.type}

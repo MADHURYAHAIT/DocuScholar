@@ -275,7 +275,7 @@ const MyApp = () => {
           </div>
         <List>
               <BlockFooter>
-              <p >Join DocuScholar to chat with Ai to get your<br/> desired answers just at a call. </p>
+              <p>Join DocuScholar to chat with Ai to get your<br/> desired answers just at a call. </p>
               </BlockFooter>
             </List>
    
