@@ -247,9 +247,9 @@ const MessagesPage =() => {
 
     setMessagesDataServer([
       {
-
+        email,
         text,
-
+        bot:false,
       },
     ]);
 
@@ -264,7 +264,7 @@ const MessagesPage =() => {
     if (text.length) {
       messagesToSend.push({
 
-        text
+        text,
     
       });
     }
@@ -276,8 +276,9 @@ const MessagesPage =() => {
     
     setAttachments([]);
     setSheetVisible(false);
+    //localStorage.getItem('Total')
     setMessagesData([...messagesData, ...messagesToSend]);
-    //setMessageText('');
+    setMessageText('');
 
     // Focus area
     if (text.length) messagebar.current.focus();
@@ -394,7 +395,7 @@ const MessagesPage =() => {
 
          {
          localStorage.getItem('TotalMsgData') ? (
-         JSON.parse(localStorage.getItem('TotalMsgData')).map((message, index) => (
+          messagesData.map((message, index) => (
         <Message
           key={index}
           type={message.type}
