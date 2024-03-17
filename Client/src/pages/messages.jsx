@@ -176,7 +176,7 @@ const MessagesPage =() => {
     
     useEffect(() => {
       // Retrieve messagesData from local storage
-      const storedMessages = localStorage.getItem('messagesData');
+      const storedMessages = localStorage.getItem('TotalMsgData');
       if (storedMessages) {
         setMessagesData(JSON.parse(storedMessages));
       }
@@ -247,9 +247,9 @@ const MessagesPage =() => {
 
     setMessagesDataServer([
       {
-        email,
+
         text,
-        bot:false,
+
       },
     ]);
 
