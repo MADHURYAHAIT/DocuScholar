@@ -1,30 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import moment from 'moment';
+import React from 'react';
 
-const DateTimeComponent = () => {
-  const [currentDateTime, setCurrentDateTime] = useState('');
-  const [Time, setTime] = useState('');
-
-  useEffect(() => {
-    const updateDateTime = () => {
-      const formattedDateTime = moment().format('dddd, MMM D');
-      const formattedTime = moment().format('HH:mm'); // Use 'HH' for 24-hour format
-      setCurrentDateTime(formattedDateTime);
-      setTime(formattedTime);
+class DateTimeParser extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      timestamp: props.timestamp,
+      formattedDateTime: ''
     };
+  }
 
-    // Update every second
-    const intervalId = setInterval(updateDateTime, 10000); // Change to 1000 for updating every second
+  componentDidMount() {
+    this.parseDateTime();
+  }
 
-    // Clean up interval on component unmount
-    return () => clearInterval(intervalId);
-  }, []);
+  parseDateTime() {
+    const { timestamp } = this.state;
+    const dateTime = new Date(timestamp);
+    const options = {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    };
+    const formattedDateTime = dateTime.toLocaleString('en-US', options); // Format: Sunday, Mar 17, 7:49 PM (example)
 
+    this.setState({
+      formattedDateTime
+    });
+  }
+
+  render() {
+    const { formattedDateTime } = this.state;
+
+    return (
+      <div>
+        <p>{formattedDateTime}</p>
+      </div>
+    );
+  }
+}
+
+// Usage
+function App() {
   return (
-    <div className='dt'>
-      <b>{currentDateTime}</b>, {Time}
+    <div>
+      <DateTimeParser timestamp={localStorage.getItem('created')} />
     </div>
   );
-};
+}
 
-export default DateTimeComponent;
+export default App;

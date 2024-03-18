@@ -45,8 +45,9 @@ app.post("/login", async (req, res) => {
         if (req.body.email && req.body.password) {
             let user = await Users.findOne(req.body);
             if (user) {
-                res.send(req.body);
-                console.log(user)
+                //res.send(req.body);
+                res.send(user);
+                //console.log(user);
                 console.log("Login Data received");
             } else {
                 res.status(401).send({ result: "Invalid Email or Password" });

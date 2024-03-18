@@ -27,7 +27,7 @@ const MessagesPage =() => {
   //messages fetch
   const fetchMessages = async () => {
     try {
-      const response = await axios.post('http://0.0.0.0:3000/fetchmessages', {
+      const response = await axios.post('http://192.168.3.239:3000/fetchmessages', {
         email, 
       });
       if (response.status === 200) {
@@ -53,7 +53,7 @@ const MessagesPage =() => {
           const sendMsgToServer = async () => {
          //console.log("message",messagesDataServer); 
           try {
-            const response = await axios.post( 'http://0.0.0.0:3000/message', {
+            const response = await axios.post( 'http://192.168.3.239:3000/message', {
               messagesDataServer,
             }, {
               headers: {
@@ -99,21 +99,7 @@ const MessagesPage =() => {
     },
   ];
   const answers = [
-    'Yes!',
-    'No',
-    'Hm...',
-    'I am not sure',
-    'And what about you?',
-    'May be ;)',
-    'I may not know',
-    'How are you ?',
-    'Hari Bol',
-    'Lorem ipsum dolor sit amet, consectetur',
-    'What?',
-    'Are you sure?',
-    'Of course',
-    'Need to think about it',
-    'Amazing!!!',
+    'I Love you so MUcHHHH !!! '
   ];
   
   const img='/images/profile.jpg';
@@ -170,17 +156,17 @@ const MessagesPage =() => {
       let b=[...messagesData,...processedFetchedMsg];
         console.log(...b);
         setMessagesData([...messagesData,...processedFetchedMsg]);
-        localStorage.setItem('TotalMsgData', JSON.stringify(b));
+        //localStorage.setItem('TotalMsgData', JSON.stringify(b));
     }, [processedFetchedMsg]);
 
     
-    useEffect(() => {
-      // Retrieve messagesData from local storage
-      const storedMessages = localStorage.getItem('TotalMsgData');
-      if (storedMessages) {
-        setMessagesData(JSON.parse(storedMessages));
-      }
-    }, []);
+    // useEffect(() => {
+    //   // Retrieve messagesData from local storage
+    //   const storedMessages = localStorage.getItem('TotalMsgData');
+    //   if (storedMessages) {
+    //     setMessagesData(JSON.parse(storedMessages));
+    //   }
+    // }, []);
 
 
 
@@ -289,7 +275,7 @@ const MessagesPage =() => {
     responseInProgress.current = true;
 
     setTimeout(() => {
-      const answer = answers[Math.floor(Math.random() * answers.length)];
+      const answer = answers;
       const person = people[Math.floor(Math.random() * people.length)];
       setTypingMessage({
         name: person.name,
@@ -394,7 +380,7 @@ const MessagesPage =() => {
         </MessagesTitle>
 
          {
-         localStorage.getItem('TotalMsgData') ? (
+
           messagesData.map((message, index) => (
         <Message
           key={index}
@@ -411,9 +397,9 @@ const MessagesPage =() => {
           )}
         </Message>
       ))
-    ) : (
-      <p>No messages available</p>
-    )}
+
+
+    }
         {typingMessage && (
           <Message
             type="received"

@@ -60,7 +60,7 @@ const MyApp = () => {
     console.log(email, password);
     
     try {
-      const response = await axios.post( 'http://0.0.0.0:3000/login', {
+      const response = await axios.post( 'http://192.168.3.239:3000/login', {
         email,
         password,
 
@@ -75,6 +75,11 @@ const MyApp = () => {
         if (data.email === email && data.password === password)
         {
           localStorage.setItem('email',data.email);
+          localStorage.setItem('phone',data.phone);
+          localStorage.setItem('fnm',data.fnm);
+          localStorage.setItem('lnm',data.lnm);
+          localStorage.setItem('email',data.email);
+          localStorage.setItem('created',data.createdAt);
           setIsAuthenticated(true);
         localStorage.setItem('isAuthenticated',true);
         }
@@ -129,9 +134,9 @@ const MyApp = () => {
                   <img src="/images/me.jpg" className='profimg' width="100"  />
              
                 </Block>
-                <p>name : Madhurya Hait</p>
-                <p>email : haitmadhurya@gmail.com</p>
-                <p>phone : 9931111589</p>
+                <p>name : {localStorage.getItem('fnm')} {localStorage.getItem('lnm')}</p>
+                <p>email : {localStorage.getItem('email')}</p>
+                <p>phone : {localStorage.getItem('phone')}</p>
 
               </Block>
 
