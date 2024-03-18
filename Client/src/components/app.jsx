@@ -80,6 +80,7 @@ const MyApp = () => {
           localStorage.setItem('lnm',data.lnm);
           localStorage.setItem('email',data.email);
           localStorage.setItem('created',data.createdAt);
+          localStorage.setItem('BotAnswer',"Didn't get that can you repeat it again !")
           setIsAuthenticated(true);
         localStorage.setItem('isAuthenticated',true);
         }

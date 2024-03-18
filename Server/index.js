@@ -1,12 +1,19 @@
+
 import express from "express";
 import './mongoDB/connection.js'; 
 import Users from './models/user.js';
 import messages from "./models/messageModel.js";
 import cors from 'cors';
 
+
 const hostname = '0.0.0.0'; 
 const port = 3000; 
 const app = express();
+
+
+
+
+
 
 app.use(express.json());
 

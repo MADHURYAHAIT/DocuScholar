@@ -17,11 +17,78 @@ import {
   f7ready,
   f7,
 } from 'framework7-react';
+
 import DateTimeComponent from './DateTimeComp';
 import FileUploadComponent from './FileUploadComponent';
 
+//grmini api
+import { GoogleGenerativeAI } from '@google/generative-ai';
+const apiKey = 'AIzaSyBzoFM1RecRFQhJCFCT_O8m_9kgB9t_OYw';
+const genAI = new GoogleGenerativeAI(apiKey);
+const generationConfig = {
+  maxOutputTokens: 80,
+};
+const model = genAI.getGenerativeModel({ model: "gemini-pro",generationConfig }); 
+const defaultprompt="Remember from now on you are a text chatbot named 'DocuScholar' not gemini model and your creator is 'Madhurya Hait' Now your job is that you need to read the pdf text input and then you will be asked questions based on that and you need to answer as text chat messages using nice signs & emojis😊 just like a person"; 
+
 
 const MessagesPage =() => {
+  model.generateContent(defaultprompt);
+  const[flag,setFlag]=useState(0);
+  const[messagesDataServer,setMessagesDataServer]=useState([]);
+ 
+  
+
+  
+  // const fetchGemini = async () => {
+  //   try {
+  //     const response = await axios.post('http://192.168.3.239:3000/fetchgemini', {
+  //       msg:localStorage.getItem("curText"), 
+  //     });
+  //     if (response.status === 200) {
+  //       const data = response.data;
+  //       console.log("Gemini Response Fetch Success !");
+  //       console.log(data);
+  //       setAnswers(data);
+  //     } else {
+  //       console.log(response.data.error); // Log any error response
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching messages:', error.message);
+  //   }
+  // };
+
+
+
+  // useEffect(() => {
+  //   fetchGemini();
+  // }, [flag]);
+
+
+useEffect(() => {
+let prompt = localStorage.getItem("curText");
+async function generateAns() {
+  try {
+// Specify Gemini-Pro model
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    console.log(text); 
+    localStorage.setItem("BotAnswer",text);
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+generateAns();
+}, [flag]);
+
+
+
+
+
+
   const [messagesFetched, setMessagesFetched] = useState([]);
   const [email,setEmail]=useState(localStorage.getItem('email'));
   //messages fetch
@@ -46,7 +113,7 @@ const MessagesPage =() => {
     fetchMessages();
   }, []);
   
-  const[messagesDataServer,setMessagesDataServer]=useState([]);
+
 
   if( messagesDataServer != []){
       useEffect(() => {
@@ -64,6 +131,8 @@ const MessagesPage =() => {
             if (response.status === 200) {
               const data = response.data;
               console.log(data);
+              
+              console.log(flag);
         
             } else {
               const errorData = response.data;
@@ -98,9 +167,7 @@ const MessagesPage =() => {
       avatar: '/images/profile.jpg',
     },
   ];
-  const answers = [
-    'I Love you so MUcHHHH !!! '
-  ];
+ 
   
   const img='/images/profile.jpg';
   
@@ -229,8 +296,10 @@ const MessagesPage =() => {
     setAttachments([...attachments]);
   };
   const  sendMessage =  () => {
+  
     const text = messageText.replace(/\n/g, '<br>').trim();
-
+    localStorage.setItem("curText",text);
+    setFlag(()=>flag+1);
     setMessagesDataServer([
       {
         email,
@@ -249,9 +318,7 @@ const MessagesPage =() => {
 
     if (text.length) {
       messagesToSend.push({
-
         text,
-    
       });
     }
    
@@ -275,7 +342,43 @@ const MessagesPage =() => {
     responseInProgress.current = true;
 
     setTimeout(() => {
-      const answer = answers;
+      
+      if (localStorage.getItem("BotAnswer")==''){
+        const answer = "Netwrok Error Please Try again";
+     
+        const person = people[Math.floor(Math.random() * people.length)];
+        setTypingMessage({
+          name: person.name,
+          avatar: person.avatar,
+        });
+        setTimeout(() => {
+          setTypingMessage(null);
+          
+          setMessagesData([
+            ...messagesData,
+            ...messagesToSend,
+            {
+              text: answer,
+              type: 'received',
+              name: person.name,
+              avatar: person.avatar,
+            },
+          ]);
+  
+          setMessagesDataServer([
+            {
+              email,
+              text: answer,
+              bot:true,
+            },
+          ]);
+          responseInProgress.current = false;
+          
+        }, 3000);
+      }
+      else{
+      const answer = localStorage.getItem("BotAnswer");
+     
       const person = people[Math.floor(Math.random() * people.length)];
       setTypingMessage({
         name: person.name,
@@ -303,9 +406,10 @@ const MessagesPage =() => {
           },
         ]);
         responseInProgress.current = false;
-      }, 1000); //typing time
+        
+      }, 3000); }//typing time
       
-    }, 1000);
+    }, 3500);
   };
 
   //console.log("JSR",JSON.parse(localStorage.getItem('TotalMsgData')));
@@ -336,6 +440,7 @@ const MessagesPage =() => {
         attachmentsVisible={attachmentsVisible()}
         sheetVisible={sheetVisible}
         value={messageText}
+
         onInput={(e) => setMessageText(e.target.value)}
       >
       <Link
@@ -351,6 +456,7 @@ const MessagesPage =() => {
           iconMd="material:send"
           slot="inner-end"
           onClick={sendMessage}
+
         />
         <MessagebarAttachments>
           {attachments.map((image, index) => (
@@ -379,7 +485,7 @@ const MessagesPage =() => {
           <DateTimeComponent/>
         </MessagesTitle>
 
-         {
+        {
 
           messagesData.map((message, index) => (
         <Message
