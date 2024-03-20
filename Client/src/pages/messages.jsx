@@ -24,96 +24,73 @@ import FileUploadComponent from './FileUploadComponent';
 //grmini api
 import { GoogleGenerativeAI } from '@google/generative-ai';
 const apiKey = 'AIzaSyBzoFM1RecRFQhJCFCT_O8m_9kgB9t_OYw';
+//const apiKey = 'AIzaSyCgvxmdok1C_GjXPvghBSVFA8Ekbt0AZj8' 
 const genAI = new GoogleGenerativeAI(apiKey);
 const generationConfig = {
-  maxOutputTokens: 80,
+  maxOutputTokens: 70,
 };
-const model = genAI.getGenerativeModel({ model: "gemini-pro",generationConfig }); 
-const defaultprompt="Remember from now on you are a text chatbot named 'DocuScholar' not gemini model and your creator is 'Madhurya Hait' Now your job is that you need to read the pdf text input and then you will be asked questions based on that and you need to answer as text chat messages using nice signs & emojis😊 just like a person"; 
-
+const defaultprompt="You are a human Scholar named 'DocuScholar' not gemini model and you are creator is 'Madhurya Hait' Now your job is that you will be asked questions based on that and you need to answer as text chat messages using emojis😊 just like a person, You will be given a question after this instruction ends now you need to answer them like a common chat in format ."; 
+const prompt2="Answer with text & emjois in short just like human chat your name is 'docuscholar' made by madhurya";
 
 const MessagesPage =() => {
-  model.generateContent(defaultprompt);
-  const[flag,setFlag]=useState(0);
+
+  const model = genAI.getGenerativeModel({ model: "gemini-pro",generationConfig }); 
   const[messagesDataServer,setMessagesDataServer]=useState([]);
- 
-  
-
-  
-  // const fetchGemini = async () => {
-  //   try {
-  //     const response = await axios.post('http://192.168.3.239:3000/fetchgemini', {
-  //       msg:localStorage.getItem("curText"), 
-  //     });
-  //     if (response.status === 200) {
-  //       const data = response.data;
-  //       console.log("Gemini Response Fetch Success !");
-  //       console.log(data);
-  //       setAnswers(data);
-  //     } else {
-  //       console.log(response.data.error); // Log any error response
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching messages:', error.message);
-  //   }
-  // };
-
-
-
-  // useEffect(() => {
-  //   fetchGemini();
-  // }, [flag]);
-
-
-useEffect(() => {
-let prompt = localStorage.getItem("curText");
-async function generateAns() {
-  try {
-// Specify Gemini-Pro model
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text); 
-    localStorage.setItem("BotAnswer",text);
-
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-generateAns();
-}, [flag]);
-
-
-
-
-
-
-  const [messagesFetched, setMessagesFetched] = useState([]);
-  const [email,setEmail]=useState(localStorage.getItem('email'));
-  //messages fetch
-  const fetchMessages = async () => {
-    try {
-      const response = await axios.post('http://192.168.3.239:3000/fetchmessages', {
-        email, 
-      });
-      if (response.status === 200) {
-        const data = response.data;
-        console.log("Response Fetch Success !");
-        setMessagesFetched(data);
-      } else {
-        console.log(response.data.error); // Log any error response
-      }
-    } catch (error) {
-      console.error('Error fetching messages:', error.message);
-    }
-  };
-
+  const gem= model.startChat();
   useEffect(() => {
-    fetchMessages();
+    const fetchData = async () => {
+      try {
+        const result = await gem.sendMessage(defaultprompt);
+        const response =await result.response.text();
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    fetchData();
   }, []);
   
 
+    async function generateAnswer(prp) {
+      console.log("======= GEMINI CALLED =======")
+      //let prompt =prp.text;
+      try {
+        const result = await gem.sendMessage(`${prompt2} Question : ${prp.text}`);
+        const response = await result.response;
+        const text = response.text();
+        console.log(text);
+        localStorage.setItem("BotAnswer", text);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+  const [messagesFetched, setMessagesFetched] = useState([]);
+  const email= localStorage.getItem('email');
+
+  //messages fetch
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.post('http://192.168.3.239:3000/fetchmessages', {
+          email, 
+        });
+        if (response.status === 200) {
+          const data = response.data;
+          console.log("Backend Response Fetch Success !");
+          setMessagesFetched(data);
+        } else {
+          console.log(response.data.error); // Log any error response
+        }
+      } catch (error) {
+        console.error('Error fetching messages:', error.message);
+      }
+    };
+
+    fetchMessages();
+  }, []);
+  
 
   if( messagesDataServer != []){
       useEffect(() => {
@@ -132,7 +109,7 @@ generateAns();
               const data = response.data;
               console.log(data);
               
-              console.log(flag);
+              //console.log(flag);
         
             } else {
               const errorData = response.data;
@@ -147,28 +124,13 @@ generateAns();
       }, [messagesDataServer]);
   }
 
-
   
-  const images = [
-    'https://cdn.framework7.io/placeholder/cats-300x300-1.jpg',
-    'https://cdn.framework7.io/placeholder/cats-200x300-2.jpg',
-    'https://cdn.framework7.io/placeholder/cats-400x300-3.jpg',
-    'https://cdn.framework7.io/placeholder/cats-300x150-4.jpg',
-    'https://cdn.framework7.io/placeholder/cats-150x300-5.jpg',
-    'https://cdn.framework7.io/placeholder/cats-300x300-6.jpg',
-    'https://cdn.framework7.io/placeholder/cats-300x300-7.jpg',
-    'https://cdn.framework7.io/placeholder/cats-200x300-8.jpg',
-    'https://cdn.framework7.io/placeholder/cats-400x300-9.jpg',
-    'https://cdn.framework7.io/placeholder/cats-300x150-10.jpg',
-  ];
+  const images = ['https://cdn.framework7.io/placeholder/cats-300x300-1.jpg'];
   const people = [
     {
       name: 'DocuScholar',
-      avatar: '/images/profile.jpg',
     },
   ];
- 
-  
   const img='/images/profile.jpg';
   
   const [attachments, setAttachments] = useState([]);
@@ -200,11 +162,9 @@ generateAns();
   ]
 
   const [messagesData, setMessagesData] = useState(a);
-
   const [processedFetchedMsg, setProcessedFetchedMsg] = useState([]);
 
     useEffect(() => {
-
       setProcessedFetchedMsg(
         messagesFetched.map((message, index) => (
         {
@@ -213,29 +173,14 @@ generateAns();
         text: message.text,
         avatar: message.bot ? `${img}` : null,
       })));
-
-     
-      
     }, [messagesFetched]);
-    
 
     useEffect(()=>{
       let b=[...messagesData,...processedFetchedMsg];
-        console.log(...b);
-        setMessagesData([...messagesData,...processedFetchedMsg]);
-        //localStorage.setItem('TotalMsgData', JSON.stringify(b));
+      setMessagesData([...messagesData,...processedFetchedMsg]);
+      // console.log(...b);
+      //localStorage.setItem('TotalMsgData', JSON.stringify(b));
     }, [processedFetchedMsg]);
-
-    
-    // useEffect(() => {
-    //   // Retrieve messagesData from local storage
-    //   const storedMessages = localStorage.getItem('TotalMsgData');
-    //   if (storedMessages) {
-    //     setMessagesData(JSON.parse(storedMessages));
-    //   }
-    // }, []);
-
-
 
   const responseInProgress = useRef(false);
   const messagebar = useRef(null);
@@ -277,29 +222,31 @@ generateAns();
       return true;
     return false;
   };
-  const deleteAttachment = (image) => {
-    const index = attachments.indexOf(image);
-    attachments.splice(index, 1);
-    setAttachments([...attachments]);
-  };
-  //for image
-  const handleAttachment = (e) => {
-    const index = f7.$(e.target).parents('label.checkbox').index();
-    const image = images[index];
-    if (e.target.checked) {
-      // Add to attachments
-      attachments.unshift(image);
-    } else {
-      // Remove from attachments
-      attachments.splice(attachments.indexOf(image), 1);
-    }
-    setAttachments([...attachments]);
-  };
-  const  sendMessage =  () => {
+  // const deleteAttachment = (image) => {
+  //   const index = attachments.indexOf(image);
+  //   attachments.splice(index, 1);
+  //   setAttachments([...attachments]);
+  // };
+  // //for image
+  // const handleAttachment = (e) => {
+  //   const index = f7.$(e.target).parents('label.checkbox').index();
+  //   const image = images[index];
+  //   if (e.target.checked) {
+  //     // Add to attachments
+  //     attachments.unshift(image);
+  //   } else {
+  //     // Remove from attachments
+  //     attachments.splice(attachments.indexOf(image), 1);
+  //   }
+  //   setAttachments([...attachments]);
+  // };
+
+
+  const sendMessage =  () => {
   
     const text = messageText.replace(/\n/g, '<br>').trim();
+    generateAnswer({ text: text });
     localStorage.setItem("curText",text);
-    setFlag(()=>flag+1);
     setMessagesDataServer([
       {
         email,
@@ -329,7 +276,6 @@ generateAns();
     
     setAttachments([]);
     setSheetVisible(false);
-    //localStorage.getItem('Total')
     setMessagesData([...messagesData, ...messagesToSend]);
     setMessageText('');
 
@@ -342,14 +288,14 @@ generateAns();
     responseInProgress.current = true;
 
     setTimeout(() => {
-      
+
       if (localStorage.getItem("BotAnswer")==''){
-        const answer = "Netwrok Error Please Try again";
+        const answer = "Netwrok Error Please Ask Again";
      
-        const person = people[Math.floor(Math.random() * people.length)];
+        const person = people[0];
         setTypingMessage({
           name: person.name,
-          avatar: person.avatar,
+          avatar: img,
         });
         setTimeout(() => {
           setTypingMessage(null);
@@ -361,7 +307,7 @@ generateAns();
               text: answer,
               type: 'received',
               name: person.name,
-              avatar: person.avatar,
+              avatar: img,
             },
           ]);
   
@@ -374,19 +320,20 @@ generateAns();
           ]);
           responseInProgress.current = false;
           
-        }, 3000);
+        }, 4000);
       }
       else{
       const answer = localStorage.getItem("BotAnswer");
      
-      const person = people[Math.floor(Math.random() * people.length)];
+      const person = people[0];
       setTypingMessage({
         name: person.name,
-        avatar: person.avatar,
+        avatar: img,
       });
       setTimeout(() => {
+       
+       
         setTypingMessage(null);
-        
         setMessagesData([
           ...messagesData,
           ...messagesToSend,
@@ -394,7 +341,7 @@ generateAns();
             text: answer,
             type: 'received',
             name: person.name,
-            avatar: person.avatar,
+            avatar: img,
           },
         ]);
 
@@ -407,20 +354,17 @@ generateAns();
         ]);
         responseInProgress.current = false;
         
-      }, 3000); }//typing time
-      
-    }, 3500);
+      }, 6500); }//typing time
+      localStorage.removeItem("BotAnswer");
+    }, 4000);
   };
-
-  //console.log("JSR",JSON.parse(localStorage.getItem('TotalMsgData')));
-
 
 
 
   return (
     <Page>
       <Navbar title={<><FaFilePdf className='ninja'/> DocuScholar</>}> 
-      {/* PdfMassiah */}
+
       
         <NavRight>
         <img
@@ -440,7 +384,6 @@ generateAns();
         attachmentsVisible={attachmentsVisible()}
         sheetVisible={sheetVisible}
         value={messageText}
-
         onInput={(e) => setMessageText(e.target.value)}
       >
       <Link
@@ -456,37 +399,21 @@ generateAns();
           iconMd="material:send"
           slot="inner-end"
           onClick={sendMessage}
-
         />
-        <MessagebarAttachments>
-          {attachments.map((image, index) => (
-            <MessagebarAttachment
-              key={index}
-              image={image}
-              onAttachmentDelete={() => deleteAttachment(image)}
-            />
-          ))}
-        </MessagebarAttachments>
-        <MessagebarSheet>
 
-          {images.map((image, index) => (
-            <MessagebarSheetImage
-              key={index}
-              image={image}
-              checked={attachments.indexOf(image) >= 0}
-              onChange={handleAttachment}
-            />
-          ))}
+        <MessagebarAttachments>
+      
+        </MessagebarAttachments>
+
+        <MessagebarSheet>
+          Hi what's up 
         </MessagebarSheet>
       </Messagebar>
-
       <Messages>
         <MessagesTitle>
           <DateTimeComponent/>
         </MessagesTitle>
-
         {
-
           messagesData.map((message, index) => (
         <Message
           key={index}
@@ -503,8 +430,7 @@ generateAns();
           )}
         </Message>
       ))
-
-
+      
     }
         {typingMessage && (
           <Message
