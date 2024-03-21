@@ -9,7 +9,6 @@
   },
   "author": "Madhurya",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
     "@google/generative-ai": "^0.3.0",
     "cors": "^2.8.5",
@@ -17,6 +16,9 @@
     "http": "^0.0.1-security",
     "mongodb": "^6.5.0",
     "mongoose": "^8.2.1",
-    "nodemon": "^3.1.0"
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.0",
+    "pdf-parse": "^1.1.1",
+    "pdfreader": "^3.0.2"
   }
 }

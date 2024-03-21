@@ -1,3 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
+
 mongoose.connect("mongodb+srv://mady:abc12345@cluster0.i5niiwg.mongodb.net/DocuScholar?retryWrites=true&w=majority");
 console.log("Connection file running");

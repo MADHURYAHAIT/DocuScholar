@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { IoMdCloudUpload } from 'react-icons/io';
 import { IoIosCloudDone } from "react-icons/io";
 import { FaFileImage } from "react-icons/fa";
+import axios from 'axios';
 // import CalTile from '../pages/CalorieTile';
 import {
   f7,
@@ -28,87 +29,80 @@ const FileUploadComponent = () => {
   const [length, setLength] = useState([]);
 
   const onDrop = useCallback(async (acceptedFiles) => {
-    const user1=localStorage.getItem('currentUser');
+    if (acceptedFiles[0].type !== 'application/pdf') {
+      f7.dialog.alert('Please upload a PDF file.');
+      return;
+    }
     const file = acceptedFiles[0];
     const formData = new FormData();
     formData.append('file', file);
-
+  
     try {
+      console.log("Here's your image", formData);
       setIsLoading(true);
-
-      const response = await fetch(`http://192.168.133.239:8000/calories?user1=${encodeURIComponent(user1)}`, {
-        method: 'POST',
-        headers: {},
-        body: formData,
-      });
-
-      if (response.ok) {
-        const Data = await response.json();
-        setMyData(Data);
-        const l = Object.keys(Data).length;
-        setLength(l);
-        console.log('Response Data:', length);
-
+      const response = await axios.post('http://192.168.38.239:3000/pdfToText', formData);
+      if (response.status === 200) {
+        const data = response.data; // No need to await here
+        console.log("Pdf conversion done!");
+        console.log(data);
+        localStorage.setItem("PDFData",data);
+        setMyData(data);
         setIsSubmitted(true);
+        f7.dialog.alert("Submitted Successfully!");
       } else {
-        console.error('Error:', response.statusText);
+        console.log(response.data.error); // Log any error response
       }
     } catch (error) {
-      console.error('Error:', error.message);
+      console.error('Error fetching messages:', error.message);
     } finally {
       setIsLoading(false);
     }
   }, []);
+  
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+
+
+
+
+
+
+
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop,accept: 'application/pdf'  });
 
   return (
-    <>
-      <Popup id="my-popup">
-        <View>
+    <Popup push className="Upload-popup-push">
+       <View>
           <Page>
-            <Navbar title="Popup">
+            <Navbar  transparent>
               <NavRight>
+
                 <Link popupClose>Close</Link>
               </NavRight>
             </Navbar>
-            <Block style={{ paddingTop:'50px' }}>
-              <p> Calories per 100 gram : </p>
-              {length > 0 ? (
-                Object.keys(MyData).map((curElm) => (
-                  <CalTile
-                    title={MyData[curElm]['Name']} 
-                    text={MyData[curElm]['Calories']}                
-                  />
-                ))
-              ) : (
-                <p style={{ padding: '50px' }}>No data available</p>
-              )}
-            </Block>
-          </Page>
-        </View>
-      </Popup>
+          <Block className='ppup'>
 
       <div {...getRootProps()} style={dropzoneStyle}>
         <input {...getInputProps()} />
         {isDragActive ? (
           <>
-            <FaFileImage  size={100} style={{paddingTop:'18px'}}/>
-            <h2 className='innerbox' style={{fontSize:'28px'}}>Drop Pic Here</h2>
+            <FaFileImage  size={220} style={{paddingTop:'18px'}}/>
+            <h2 className='innerbox' style={{fontSize:'28px'}}>Drop PDF File Here</h2>
           </>
         ) : (
           <p>
             {isSubmitted  && !isLoading  ? (
               <div className='ib'>
-                <IoIosCloudDone size={100}/>
-                <h2 style={{fontSize:'24px'}}>Result ready !</h2>
-                <p>Know about your food from the button below</p>
+                <IoIosCloudDone size={220}/>
+                <h2 style={{fontSize:'24px'}}>File Analyzed !</h2>
+                <p>Drag & drop your PDF files here / click to select files</p>
               </div>
             ) : (
               <div className='ib'>
-                <IoMdCloudUpload size={100} />
-                <h2 style={{fontSize:'24px'}}>Calorie Estimator Tool</h2>
-                <p>Drag & drop your pic here / click to select files</p>
+                <IoMdCloudUpload size={220} />
+                <h2 style={{fontSize:'24px'}}>File Uploader</h2>
+                <p>Drag & drop your PDF files here / click to select files</p>
               </div>
             )}
           </p>
@@ -117,14 +111,14 @@ const FileUploadComponent = () => {
       
       {isLoading && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <p>Analyzing Image...</p>
+          <p>Analyzing Files...</p>
           <p>
             <span className="progressbar-infinite color-multi"></span>
           </p>
         </div>
       )}
 
-      {isSubmitted && !isLoading &&(
+      {/* {isSubmitted && !isLoading &&(
         <Block>
           <Button fill popupOpen="#my-popup">View result</Button>
         </Block>
@@ -133,8 +127,13 @@ const FileUploadComponent = () => {
         <Block>
           <Button fill disabled>Know Calories</Button>
         </Block>
-      )}
-    </>
+      )} */}
+
+      </Block>
+    
+       </Page>
+    </View>
+  </Popup>
   );
 };
 
