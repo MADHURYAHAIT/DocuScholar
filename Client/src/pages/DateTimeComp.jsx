@@ -45,7 +45,7 @@ class DateTimeParser extends React.Component {
 // Usage
 function App() {
   return (
-    <div>
+    <div style={{color:'white'}}>
       <DateTimeParser timestamp={localStorage.getItem('created')} />
     </div>
   );

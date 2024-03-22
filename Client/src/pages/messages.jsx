@@ -16,11 +16,12 @@ import {
   MessagebarSheetImage,
   f7ready,
   f7,
+  NavLeft,
 } from "framework7-react";
 
 import DateTimeComponent from "./DateTimeComp";
 import FileUploadComponent from "./FileUploadComponent";
-
+import { FaLinkedinIn } from "react-icons/fa6";
 //grmini api
 import {
   GoogleGenerativeAI,
@@ -147,7 +148,7 @@ const MessagesPage = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.post(
-          "http://192.168.38.239:3000/fetchmessages",
+          "http://192.168.36.239:3000/fetchmessages",
           {
             email,
           }
@@ -173,7 +174,7 @@ const MessagesPage = () => {
         //console.log("message",messagesDataServer);
         try {
           const response = await axios.post(
-            "http://192.168.38.239:3000/message",
+            "http://192.168.36.239:3000/message",
             {
               messagesDataServer,
             },
@@ -433,11 +434,10 @@ const MessagesPage = () => {
   };
 
   const chatRef = useRef(null);
+
   useEffect(() => {
     // Check if the chat is scrolled to the bottom
-    const isScrolledToBottom =
-      chatRef.current.scrollTop + chatRef.current.clientHeight ===
-      chatRef.current.scrollHeight;
+    const isScrolledToBottom = chatRef.current.scrollTop + chatRef.current.clientHeight +100 === chatRef.current.scrollHeight;
     setMessagesBottom(isScrolledToBottom);
   }, [messagesDataServer]);
 
@@ -450,13 +450,28 @@ const MessagesPage = () => {
 
   return (
     <Page>
+       <div className='Linkdin'>
+         <a  id="no-underline" href="/li/"> 
+          <div className='bx'> 
+            <FaLinkedinIn style={{fontSize:'25px'}}/> 
+          </div> 
+            <div className='rotate-90'><b>connect</b> </div> 
+        </a>
+      </div>
+
+      
+        
       <Navbar
+      
         title={
           <>
+          
             <FaFilePdf className="ninja" /> DocuScholar
           </>
+       
         }
       >
+        
         <NavRight>
           <img
             src="/images/me.jpg"
@@ -504,7 +519,7 @@ const MessagesPage = () => {
           <FileUploadComponent />
         </MessagebarSheet>
       </Messagebar>
-      <Messages ref={chatRef}>
+      <Messages >
         <MessagesTitle>
           <DateTimeComponent />
         </MessagesTitle>
@@ -518,6 +533,7 @@ const MessagesPage = () => {
             first={isFirstMessage(message, index)}
             last={isLastMessage(message, index)}
             tail={isTailMessage(message, index)}
+            ref={chatRef}
           >
             {message.text && (
               <span

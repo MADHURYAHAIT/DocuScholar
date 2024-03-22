@@ -73,7 +73,7 @@
 .messages{
     margin-left: 5px;
     margin-right: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 
@@ -99,14 +99,16 @@ h1{
 
 .bottom-arrow {
     position: fixed;
-    bottom: 70px;
+    bottom: 90px;
     right: 20px;
     width: 40px;
     height: 40px;
-    background-color: #007aff; /* Adjust color as needed */
-    color: white;
+    background-color: #ffffff; /* Adjust color as needed */
+    color: rgb(91, 91, 91);
     font-size: 25px;
+    box-shadow: rgb(249, 249, 249) ;
     border-radius: 50%;
+    box-shadow:0 8px 25px 0 rgba(0, 0, 0, 0.5) ;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -119,11 +121,102 @@ h1{
   }
   
 
+#no-underline {
+    text-decoration: none;
+}
+
+.messages-content {
+    position: relative; /* Positioning context for child elements */
+}
+
+.messages-content::before {
+    /* backdrop-filter: blur(2px); */
+    content: ""; /* Required for pseudo-elements */
+    position: fixed; /* Position the overlay */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+    z-index: 1; /* Ensure overlay is above the background */
+}
+
+.messages-content{
+    background-image: url('bg.jpg');
+    background-size: 240px 240px; 
+    background-repeat: repeat; 
+    height: 100vh; 
+    position: relative;
+}
+/* .login-screen-content{
+    backdrop-filter: blur(12px);
+   background-color: #aeaeae0b;
+} */
+/* .messages-content {
+    background-image: url('https://images4.alphacoders.com/134/1343898.png');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    height: 100vh; 
+    position: relative;
+} */
+
+
+.message-name,.message-header{
+    color: #ffffff;
+}
+
+.Linkdin{   
+    display: none;
+}
+.signout{
+    background-color: #d31818;
+    margin-left: 13%;
+    margin-right: 13%;
+}
 
 @media screen and (min-width: 700px) {
+
+
+/* Linkdin */
+
+.Linkdin ,.Linkdin a{
+    display:inline;
+    position: fixed;
+    z-index: 999;
+    transform: translateY(-50%);
+    top: 50%;
+    color:#e8e8e8;
+    width:50px;
+    height:150px;
+    justify-content: space-between;
+    cursor: pointer;
+    left: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.01));
+    backdrop-filter: blur(8px);
+    box-shadow:0 20px 30px 0 rgba(0, 0, 0, 0.7) ;
+}
+.bx{
+    padding: 14px 15px ;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+.rotate-90 {
+
+    transform: rotate(-90deg);
+    font-family:'Reckless Neue Medium' ;
+    padding: 40px 20px;
+    padding-left: 0px;
+
+    
+  }
+
     .messages{
-        margin-left: 50px;
-        margin-right: 50px;
+        margin-left: 80px;
+        margin-right: 80px;
+        margin-bottom: 0px;
     }
     .navbar-inner {
         padding: 18px;

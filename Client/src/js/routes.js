@@ -48,7 +48,7 @@ var routes = [
   {
     path: '/li/',
     component: () => {
-      window.location.href = "https://www.linkedin.com/in/madhurya-hait-b8128017a/";
+      window.location.href = "https://www.linkedin.com/in/madhuryahait/";
       return null; // or an empty component
     },
   },

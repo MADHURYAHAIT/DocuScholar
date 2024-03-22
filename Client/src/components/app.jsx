@@ -60,7 +60,7 @@ const MyApp = () => {
     console.log(email, password);
     
     try {
-      const response = await axios.post( 'http://192.168.38.239:3000/login', {
+      const response = await axios.post( 'http://192.168.36.239:3000/login', {
         email,
         password,
 
@@ -101,9 +101,6 @@ const MyApp = () => {
     name: 'DocuScholar', // App name
     id: 'com.doctalk.id',
     theme: 'auto',
-
-
-
       // App store
       store: store,
       // App routes
@@ -141,7 +138,7 @@ const MyApp = () => {
 
               </Block>
 
-            <Button  onClick={()=>logout()}><h3 style={{color:'red'}}>Sign out</h3></Button>
+            <Button className='signout'fill  onClick={()=>logout()}><h3>Sign out</h3></Button>
      
             </Page>
           </View>
