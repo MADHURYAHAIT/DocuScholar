@@ -1,3 +1,3 @@
 # DocuScholar
  
-An Ai based tool to do take pdf inputs & then you can ask questions .  
+An Ai based MERN Stack chat app tool to do take pdf inputs & then you can ask questions .  
