@@ -52,10 +52,7 @@ const safetySettings = [
   },
 ];
 
-const model = genAI.getGenerativeModel({
-  model: "gemini-pro",
-  generationConfig,
-});
+
 
 //const defaultprompt="You are a human Scholar named 'DocuScholar' not chatini model and you are creator is 'Madhurya Hait' Now your job is that you will be asked questions based on that and you need to answer as text chat messages using emojis😊 just like a person, You will be given a question after this instruction ends now you need to answer them like a common chat in format .";
 const prompt2 =
@@ -63,13 +60,20 @@ const prompt2 =
 
 const MessagesPage = () => {
   const [messagesDataServer, setMessagesDataServer] = useState([]);
-  const chat = model.startChat({
+
+  const model = genAI.getGenerativeModel({
+    model: "gemini-pro",
+    generationConfig,
+  });
+  
+  // Call startChat only once outside useEffect
+  let chat = model.startChat({
     history: [
       {
         role: "user",
         parts: [
           {
-            text: "You are a human Scholar named 'DocuScholar' not Gemini model and you are creator is 'Madhurya Hait' Now your job is that you will be asked questions based on pdf long text chunk and you need to answer as text chat messages using emojis😊 just like a person. ",
+            text: "You are a human Scholar named 'DocuScholar' not Gemini model and you are creator is 'Madhurya Hait' Now your job is that you will be asked questions based on pdf long text chunk and you need to answer as text chat messages using emojis just like a person. ",
           },
         ],
       },
@@ -80,44 +84,47 @@ const MessagesPage = () => {
         ],
       },
     ],
+    generationConfig: {
+      maxOutputTokens: 100,
+    },
   });
-
+  
   const PDFData = localStorage.getItem("PDFData");
+  
   useEffect(() => {
     if (PDFData) {
       const fetchData = async () => {
         try {
           const textLength = PDFData.length;
           const chunkSize = 5000;
-
+  
           // Loop through the text in chunks
           for (let i = 0; i < textLength; i += chunkSize) {
             // Get the chunk of text
             console.log(i);
             const chunk = PDFData.slice(i, i + chunkSize);
-
-            // Send the message
-
+  
+            // Send the message without restarting chat
             const s = await chat.sendMessage(`PARAGRAPH INPUT :${chunk} `);
+  
             const resp = await s.response.text();
-
             console.log(resp);
           }
         } catch (error) {
           console.error(error);
         }
       };
-
       fetchData();
     }
   }, [PDFData]);
 
+  
+  
   async function generateAnswer(prp) {
     console.log("======= GEMINI CALLED =======");
     //let prompt =prp.text;
     try {
       if (PDFData) {
-        //  const result = await chat.sendMessage(`Answer Question based on the Given Paragraph with text & emjois remember your name is 'Docuscholar' made by madhurya PARAGRAPH : `);
         const result1 = await chat.sendMessage(`QUESTION : ${prp.text}`);
         const response = await result1.response;
         const text = response.text();
@@ -129,7 +136,7 @@ const MessagesPage = () => {
         const result = await chat.sendMessage(`Question : ${prp.text}`);
         const response = await result.response;
         const text = response.text();
-
+  
         const history = await chat.getHistory();
         console.log(history);
         console.log(text);
@@ -139,10 +146,15 @@ const MessagesPage = () => {
       console.error(error);
     }
   }
+  
+
+
+
+
 
   const [messagesFetched, setMessagesFetched] = useState([]);
   const email = localStorage.getItem("email");
-  const [messagesBottom, setMessagesBottom] = useState(true); 
+
   //messages fetch
   useEffect(() => {
     const fetchMessages = async () => {
@@ -168,6 +180,7 @@ const MessagesPage = () => {
     fetchMessages();
   }, []);
 
+  
   if (messagesDataServer != []) {
     useEffect(() => {
       const sendMsgToServer = async () => {
@@ -201,6 +214,10 @@ const MessagesPage = () => {
       sendMsgToServer();
     }, [messagesDataServer]);
   }
+
+
+
+
 
   const images = ["https://cdn.framework7.io/placeholder/cats-300x300-1.jpg"];
   const people = [
@@ -433,18 +450,6 @@ const MessagesPage = () => {
     }, 5000);
   };
 
-  const chatRef = useRef(null);
-
-  useEffect(() => {
-    // Check if the chat is scrolled to the bottom
-    const isScrolledToBottom = chatRef.current.scrollTop + chatRef.current.clientHeight +100 === chatRef.current.scrollHeight;
-    setMessagesBottom(isScrolledToBottom);
-  }, [messagesDataServer]);
-
-  const scrollToBottom = () => {
-    // Scroll the chat to the bottom
-    chatRef.current.scrollTop = chatRef.current.scrollHeight;
-  };
 
 
 
@@ -501,9 +506,6 @@ const MessagesPage = () => {
           iconIos="f7:paperclip_fill"
           iconMd="material:attach_file"
           slot="inner-start"
-          // onClick={() => {
-          //   setSheetVisible(!sheetVisible);
-          // }}
           popupOpen=".Upload-popup-push"
         />
         <Link
@@ -513,13 +515,13 @@ const MessagesPage = () => {
           onClick={sendMessage}
         />
 
-        <MessagebarAttachments></MessagebarAttachments>
+        {/* <MessagebarAttachments></MessagebarAttachments> */}
 
-        <MessagebarSheet>
+
           <FileUploadComponent />
-        </MessagebarSheet>
+
       </Messagebar>
-      <Messages >
+      <Messages  >
         <MessagesTitle>
           <DateTimeComponent />
         </MessagesTitle>
@@ -533,7 +535,7 @@ const MessagesPage = () => {
             first={isFirstMessage(message, index)}
             last={isLastMessage(message, index)}
             tail={isTailMessage(message, index)}
-            ref={chatRef}
+            
           >
             {message.text && (
               <span
@@ -555,11 +557,13 @@ const MessagesPage = () => {
           />
         )}
       </Messages>
-      {!messagesBottom && (
+
+      {/* { (
         <div className="bottom-arrow" onClick={scrollToBottom}>
           <FaArrowCircleDown />
         </div>
-      )}
+      )} */}
+
     </Page>
   );
 };
