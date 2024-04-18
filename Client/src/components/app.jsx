@@ -60,7 +60,7 @@ const MyApp = () => {
     console.log(email, password);
     
     try {
-      const response = await axios.post( 'http://192.168.36.239:3000/login', {
+      const response = await axios.post( 'http://192.168.26.239:3000/login', {
         email,
         password,
 
