@@ -2,7 +2,6 @@
 import HomePage from '../pages/home.jsx';
 import AboutPage from '../pages/about.jsx';
 import FormPage from '../pages/form.jsx';
-import CatalogPage from '../pages/catalog.jsx';
 import ProductPage from '../pages/product.jsx';
 import SettingsPage from '../pages/settings.jsx';
 import DescriptionPage from '../pages/description.jsx';
@@ -71,10 +70,6 @@ var routes = [
   {
     path: '/form/',
     component: FormPage,
-  },
-  {
-    path: '/catalog/',
-    component: CatalogPage,
   },
   {
     path: '/message/',

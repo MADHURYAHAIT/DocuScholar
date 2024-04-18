@@ -28,7 +28,7 @@ import {
 
 
 import routes from '../js/routes';
-import store from '../js/store';
+
 import axios from 'axios';
 
 const logout=()=>{
@@ -60,7 +60,7 @@ const MyApp = () => {
     console.log(email, password);
     
     try {
-      const response = await axios.post( 'http://192.168.26.239:3000/login', {
+      const response = await axios.post( 'http://10.50.59.252:3000/login', {
         email,
         password,
 
@@ -101,8 +101,7 @@ const MyApp = () => {
     name: 'DocuScholar', // App name
     id: 'com.doctalk.id',
     theme: 'auto',
-      // App store
-      store: store,
+
       // App routes
       routes: routes,
   };

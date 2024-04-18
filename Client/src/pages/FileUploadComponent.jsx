@@ -40,7 +40,7 @@ const FileUploadComponent = () => {
     try {
       console.log("Here's your image", formData);
       setIsLoading(true);
-      const response = await axios.post('http://192.168.26.239:3000/pdfToText', formData);
+      const response = await axios.post('http://10.50.59.252:3000/pdfToText', formData);
       if (response.status === 200) {
         const data = response.data; // No need to await here
         console.log("Pdf conversion done!");
