@@ -6,6 +6,7 @@ It uses MERN technologies and along with that uses the brand new Fast Api techno
 
 Here a picture of the interface.
 
-<img width="500" alt="docuscholar" src="https://github.com/MADHURYAHAIT/DocuScholar/assets/101663118/2b5f14e1-ccb5-4488-9fe1-d23025473fd0">
+<img width="100%" alt="docuscholar" src="https://github.com/MADHURYAHAIT/DocuScholar/assets/101663118/2b5f14e1-ccb5-4488-9fe1-d23025473fd0">
 
-This App is still under developement
+
+This App is still under developement.
