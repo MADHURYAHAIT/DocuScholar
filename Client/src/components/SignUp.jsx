@@ -45,7 +45,7 @@ const handleSubmit = async (e) => {
   console.log(email, phone, password);
   
   try {
-    const response = await axios.post('http://192.168.192.239:3000/signup', {
+    const response = await axios.post('http://192.168.250.239:3000/signup', {
       email,
       phone,
       password,

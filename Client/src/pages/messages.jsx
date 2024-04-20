@@ -160,7 +160,7 @@ const MessagesPage = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.post(
-          "http://10.50.59.252:3000/fetchmessages",
+          "http://192.168.250.239:3000/fetchmessages",
           {
             email,
           }
@@ -187,7 +187,7 @@ const MessagesPage = () => {
         //console.log("message",messagesDataServer);
         try {
           const response = await axios.post(
-            "http://10.50.59.252:3000/message",
+            "http://192.168.250.239:3000/message",
             {
               messagesDataServer,
             },
