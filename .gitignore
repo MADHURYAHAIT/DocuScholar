@@ -1,2 +1,15 @@
 node_modules
 .env
+
+# Ignore virtual environment directories
+# Ignore virtual environment
+venv/
+dsenv/
+env/
+
+
+# Ignore compiled Python files
+*.pyc
+
+# Ignore macOS system files
+.DS_Store

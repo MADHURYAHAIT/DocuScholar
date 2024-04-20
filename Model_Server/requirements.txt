@@ -1,7 +1,13 @@
-langchain
-langchain_openai
-langchain_core
+#pip install -r requirements.txt
+#pip install -U langchain-community
+
+# fastapi
+# uvicorn
+
+
 python-dotenv
-langserve
-fastapi
-unicorn
+langchain
+PyPDF2
+faiss-cpu
+langchain_google_genai
+google-generativeai
