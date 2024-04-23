@@ -121,32 +121,32 @@ const MessagesPage = () => {
   
   
   async function generateAnswer(prp) {
-    console.log("======= GEMINI CALLED =======");
-    //let prompt =prp.text;
-    try {
-      if (PDFData) {
-        const result1 = await chat.sendMessage(`QUESTION : ${prp.text}`);
-        const response = await result1.response;
-        const text = response.text();
-        const history = await chat.getHistory();
-        console.log("hist", history);
-        console.log("reply", text);
-        localStorage.setItem("BotAnswer", text);
-      } else {
-        const result = await chat.sendMessage(`Question : ${prp.text}`);
-        const response = await result.response;
-        const text = response.text();
+    // console.log("======= GEMINI CALLED =======");
+    // //let prompt =prp.text;
+    // try {
+    //   if (PDFData) {
+    //     const result1 = await chat.sendMessage(`QUESTION : ${prp.text}`);
+    //     const response = await result1.response;
+    //     const text = response.text();
+    //     const history = await chat.getHistory();
+    //     console.log("hist", history);
+    //     console.log("reply", text);
+    //     localStorage.setItem("BotAnswer", text);
+    //   } else {
+    //     const result = await chat.sendMessage(`Question : ${prp.text}`);
+    //     const response = await result.response;
+    //     const text = response.text();
   
-        const history = await chat.getHistory();
-        console.log(history);
-        console.log(text);
-        localStorage.setItem("BotAnswer", text);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    //     const history = await chat.getHistory();
+    //     console.log(history);
+    //     console.log(text);
+    //     localStorage.setItem("BotAnswer", text);
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // }
   }
-  
+
 
 
 
@@ -179,6 +179,7 @@ const MessagesPage = () => {
 
     fetchMessages();
   }, []);
+
 
   
   if (messagesDataServer != []) {
@@ -216,8 +217,29 @@ const MessagesPage = () => {
   }
 
 
-
-
+    
+  if (messagesDataServer != []) {
+    useEffect(() => {
+      console.log("Send Msg to Fastapi");
+  const sendQuestionToServer = async (question) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/ask", {
+        user_question: question,
+      });
+      if (response.status === 200) {
+        const responseData = response.data;
+        // Process the response data as needed
+        console.log("Server Response:", responseData.response);
+      } else {
+        console.log("Error:", response.data.detail); // Log any error response
+      }
+    } catch (error) {
+      console.error("Error asking question:", error.message);
+    }
+  };
+  sendQuestionToServer();
+  }, [messagesDataServer]);
+  }
 
   const images = ["https://cdn.framework7.io/placeholder/cats-300x300-1.jpg"];
   const people = [
