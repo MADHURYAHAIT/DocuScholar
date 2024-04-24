@@ -52,8 +52,11 @@ def update_item(item_id: int, item: Item):
 os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-@app.post("/ask")
+@app.get("/ask")
 async def ask_question(user_question: str):
+    print(user_question)
+    print("=========Hahahaha==========")
+    
     try:
         # Load embeddings
         embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
@@ -95,7 +98,7 @@ def get_vector_store(text_chunks):
 
 def get_conversational_chain():
     prompt_template = """
-    Answer the question as detailed as possible from the provided context, make sure to provide all the details, if the answer is not in
+    Answer the question as detailed as possible from the provided context and knowledge out of it, make sure to provide all the details and try to include emojis, if the answer is not in
     provided context just say, "answer is not available in the context, Please ask a suitable question", don't provide the wrong answer\n\n
     Context:\n {context}?\n
     Question: \n{question}\n

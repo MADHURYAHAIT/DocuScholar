@@ -22,135 +22,14 @@ import {
 import DateTimeComponent from "./DateTimeComp";
 import FileUploadComponent from "./FileUploadComponent";
 import { FaLinkedinIn } from "react-icons/fa6";
-//grmini api
-import {
-  GoogleGenerativeAI,
-  HarmBlockThreshold,
-  HarmCategory,
-} from "@google/generative-ai";
-
-const apiKey = "AIzaSyBzoFM1RecRFQhJCFCT_O8m_9kgB9t_OYw";
-//const apiKey = 'AIzaSyCgvxmdok1C_GjXPvghBSVFA8Ekbt0AZj8'
-const genAI = new GoogleGenerativeAI(apiKey);
-
-const generationConfig = {
-  stopSequences: ["red"],
-  maxOutputTokens: 2000,
-  temperature: 0.9,
-  topP: 1,
-  topK: 1,
-};
-
-const safetySettings = [
-  {
-    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-  },
-  {
-    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-  },
-];
-
-
-
-//const defaultprompt="You are a human Scholar named 'DocuScholar' not chatini model and you are creator is 'Madhurya Hait' Now your job is that you will be asked questions based on that and you need to answer as text chat messages using emojis😊 just like a person, You will be given a question after this instruction ends now you need to answer them like a common chat in format .";
-const prompt2 =
-  "Answer with text & emjois in short just like human chat your name is 'docuscholar' made by madhurya";
 
 const MessagesPage = () => {
+  const [FastApiAns, setFastApiAns] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [messagesDataServer, setMessagesDataServer] = useState([]);
+  const [messagesDataServer2, setMessagesDataServer2] = useState([]);
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-pro",
-    generationConfig,
-  });
-  
-  // Call startChat only once outside useEffect
-  let chat = model.startChat({
-    history: [
-      {
-        role: "user",
-        parts: [
-          {
-            text: "You are a human Scholar named 'DocuScholar' not Gemini model and you are creator is 'Madhurya Hait' Now your job is that you will be asked questions based on pdf long text chunk and you need to answer as text chat messages using emojis just like a person. ",
-          },
-        ],
-      },
-      {
-        role: "model",
-        parts: [
-          { text: "Sure, From now on I am DocuScholar made by Madhurya Hait" },
-        ],
-      },
-    ],
-    generationConfig: {
-      maxOutputTokens: 100,
-    },
-  });
-  
   const PDFData = localStorage.getItem("PDFData");
-  
-  useEffect(() => {
-    if (PDFData) {
-      const fetchData = async () => {
-        try {
-          const textLength = PDFData.length;
-          const chunkSize = 5000;
-  
-          // Loop through the text in chunks
-          for (let i = 0; i < textLength; i += chunkSize) {
-            // Get the chunk of text
-            console.log(i);
-            const chunk = PDFData.slice(i, i + chunkSize);
-  
-            // Send the message without restarting chat
-            const s = await chat.sendMessage(`PARAGRAPH INPUT :${chunk} `);
-  
-            const resp = await s.response.text();
-            console.log(resp);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchData();
-    }
-  }, [PDFData]);
-
-  
-  
-  async function generateAnswer(prp) {
-    // console.log("======= GEMINI CALLED =======");
-    // //let prompt =prp.text;
-    // try {
-    //   if (PDFData) {
-    //     const result1 = await chat.sendMessage(`QUESTION : ${prp.text}`);
-    //     const response = await result1.response;
-    //     const text = response.text();
-    //     const history = await chat.getHistory();
-    //     console.log("hist", history);
-    //     console.log("reply", text);
-    //     localStorage.setItem("BotAnswer", text);
-    //   } else {
-    //     const result = await chat.sendMessage(`Question : ${prp.text}`);
-    //     const response = await result.response;
-    //     const text = response.text();
-  
-    //     const history = await chat.getHistory();
-    //     console.log(history);
-    //     console.log(text);
-    //     localStorage.setItem("BotAnswer", text);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  }
-
-
-
-
-
 
   const [messagesFetched, setMessagesFetched] = useState([]);
   const email = localStorage.getItem("email");
@@ -180,12 +59,10 @@ const MessagesPage = () => {
     fetchMessages();
   }, []);
 
-
-  
-  if (messagesDataServer != []) {
-    useEffect(() => {
+  useEffect(() => {
+    if (messagesDataServer.length > 0) {
       const sendMsgToServer = async () => {
-        //console.log("message",messagesDataServer);
+        setIsLoading(true);
         try {
           const response = await axios.post(
             "http://192.168.250.239:3000/message",
@@ -213,33 +90,30 @@ const MessagesPage = () => {
         }
       };
       sendMsgToServer();
-    }, [messagesDataServer]);
-  }
-
-
-    
-  if (messagesDataServer != []) {
-    useEffect(() => {
-      console.log("Send Msg to Fastapi");
-  const sendQuestionToServer = async (question) => {
-    try {
-      const response = await axios.post("http://127.0.0.1:8000/ask", {
-        user_question: question,
-      });
-      if (response.status === 200) {
-        const responseData = response.data;
-        // Process the response data as needed
-        console.log("Server Response:", responseData.response);
-      } else {
-        console.log("Error:", response.data.detail); // Log any error response
-      }
-    } catch (error) {
-      console.error("Error asking question:", error.message);
     }
-  };
-  sendQuestionToServer();
   }, [messagesDataServer]);
-  }
+
+  // useEffect(() => {
+  //   if (messagesDataServer2.length > 0) {
+  //     const sendQuestionToServer = async () => {
+  //       try {
+  //         const response = await axios.get(`http://127.0.0.1:8000/ask?user_question=${encodeURIComponent(messagesDataServer2[0])}`);
+  //         if (response.status === 200) {
+  //           const responseData = response.data;
+  //           // Process the response data as needed
+  //           console.log("Server Response:", responseData.response);
+
+  //           setFastApiAns(responseData.response);
+  //         } else {
+  //           console.log("Error:", response.data.detail); // Log any error response
+  //         }
+  //       } catch (error) {
+  //         console.error("Error asking question:", error.message);
+  //       }
+  //     };
+  //     sendQuestionToServer();
+  //   }
+  // }, [messagesDataServer2]);
 
   const images = ["https://cdn.framework7.io/placeholder/cats-300x300-1.jpg"];
   const people = [
@@ -343,28 +217,9 @@ const MessagesPage = () => {
       return true;
     return false;
   };
-  // const deleteAttachment = (image) => {
-  //   const index = attachments.indexOf(image);
-  //   attachments.splice(index, 1);
-  //   setAttachments([...attachments]);
-  // };
-  // //for image
-  // const handleAttachment = (e) => {
-  //   const index = f7.$(e.target).parents('label.checkbox').index();
-  //   const image = images[index];
-  //   if (e.target.checked) {
-  //     // Add to attachments
-  //     attachments.unshift(image);
-  //   } else {
-  //     // Remove from attachments
-  //     attachments.splice(attachments.indexOf(image), 1);
-  //   }
-  //   setAttachments([...attachments]);
-  // };
 
   const sendMessage = () => {
     const text = messageText.replace(/\n/g, "<br>").trim();
-    generateAnswer({ text: text });
     localStorage.setItem("curText", text);
     setMessagesDataServer([
       {
@@ -373,6 +228,8 @@ const MessagesPage = () => {
         bot: false,
       },
     ]);
+
+    setMessagesDataServer2([text]);
 
     const messagesToSend = [];
 
@@ -405,25 +262,28 @@ const MessagesPage = () => {
 
     responseInProgress.current = true;
 
-    setTimeout(() => {
-      if (localStorage.getItem("BotAnswer") == "") {
-        const answer = "Netwrok Error Please Ask Again";
+    setTimeout(async () => {
+      setTypingMessage({
+        name: "DocuScholar",
+        avatar: img,
+      });
 
-        const person = people[0];
-        setTypingMessage({
-          name: person.name,
-          avatar: img,
-        });
-        setTimeout(() => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/ask?user_question=${encodeURIComponent(text)}`);
+        if (response.status === 200) {
+          const responseData = response.data;
+          // Process the response data as needed
+          console.log("Server Response:", responseData.response);
+
+          setFastApiAns(responseData.response);
           setTypingMessage(null);
 
-          setMessagesData([
-            ...messagesData,
-            ...messagesToSend,
+          setMessagesData((prevMessagesData) => [
+            ...prevMessagesData,
             {
-              text: answer,
+              text: responseData.response,
               type: "received",
-              name: person.name,
+              name: "DocuScholar",
               avatar: img,
             },
           ]);
@@ -431,54 +291,29 @@ const MessagesPage = () => {
           setMessagesDataServer([
             {
               email,
-              text: answer,
+              text: responseData.response,
               bot: true,
             },
           ]);
-          responseInProgress.current = false;
-        }, 4000);
-      } else {
-        const answer = localStorage.getItem("BotAnswer");
 
-        const person = people[0];
-        setTypingMessage({
-          name: person.name,
-          avatar: img,
-        });
-        setTimeout(() => {
+          responseInProgress.current = false;
+        } else {
+          console.log("Error:", response.data.detail); // Log any error response
           setTypingMessage(null);
-          setMessagesData([
-            ...messagesData,
-            ...messagesToSend,
-            {
-              text: answer,
-              type: "received",
-              name: person.name,
-              avatar: img,
-            },
-          ]);
-
-          setMessagesDataServer([
-            {
-              email,
-              text: answer,
-              bot: true,
-            },
-          ]);
           responseInProgress.current = false;
-        }, 7500);
-      } //typing time
-      localStorage.removeItem("BotAnswer");
-    }, 5000);
+        }
+      } catch (error) {
+        console.error("Error asking question:", error.message);
+        setTypingMessage(null);
+        responseInProgress.current = false;
+      }
+    }, 1500);
   };
-
-
-
 
   return (
     <Page>
-       <div className='Linkdin'>
-         <a  id="no-underline" href="/li/"> 
+      <div className='Linkdin'>
+        <a  id="no-underline" href="/li/"> 
           <div className='bx'> 
             <FaLinkedinIn style={{fontSize:'25px'}}/> 
           </div> 
@@ -486,19 +321,13 @@ const MessagesPage = () => {
         </a>
       </div>
 
-      
-        
       <Navbar
-      
         title={
           <>
-          
             <FaFilePdf className="ninja" /> DocuScholar
           </>
-       
         }
       >
-        
         <NavRight>
           <img
             src="/images/me.jpg"
@@ -557,8 +386,8 @@ const MessagesPage = () => {
             first={isFirstMessage(message, index)}
             last={isLastMessage(message, index)}
             tail={isTailMessage(message, index)}
-            
           >
+            {/* Render message text */}
             {message.text && (
               <span
                 slot="text"
@@ -567,6 +396,8 @@ const MessagesPage = () => {
             )}
           </Message>
         ))}
+        
+        {/* Render typing message */}
         {typingMessage && (
           <Message
             type="received"
