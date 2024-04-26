@@ -28,6 +28,27 @@ const FileUploadComponent = () => {
   const [MyData, setMyData] = useState([]);
   const [length, setLength] = useState([]);
 
+  const fastApi = useCallback(async (txt) => {
+    try {
+ 
+      //console.log(txt);
+      const response = await axios.get(`http://127.0.0.1:8000/compile?Pdf_data=${encodeURIComponent(txt)}`);
+      if (response.status === 200) {
+        const responseData = response.data;
+        console.log("Index updated successfully!",responseData);
+        //console.log(data);
+        setIsSubmitted(true);
+      } else {
+        console.log(response.data.error);
+      }
+    } catch (error) {
+      console.error('Error updating index:', error.message);
+    } finally {
+
+    }
+    
+  }, []);
+
   const onDrop = useCallback(async (acceptedFiles) => {
     if (acceptedFiles[0].type !== 'application/pdf') {
       f7.dialog.alert('Please upload a PDF file.');
@@ -38,14 +59,14 @@ const FileUploadComponent = () => {
     formData.append('file', file);
   
     try {
-      console.log("Here's your image", formData);
-      setIsLoading(true);
-      const response = await axios.post('http://192.168.250.239:3000/pdfToText', formData);
+      console.log("Here's your image", formData.get('file'));
+      setIsLoading(true);  
+      const response = await axios.post('http://192.168.81.239:3000/pdfToText', formData);
       if (response.status === 200) {
-        const data = response.data; // No need to await here
+        const data = response.data;
         console.log("Pdf conversion done!");
-        console.log(data);
-        localStorage.setItem("PDFData",data);
+        localStorage.setItem("PDFData", data);
+        fastApi(JSON.stringify(data)); // Convert data to JSON before sending
         setMyData(data);
         setIsSubmitted(true);
         f7.dialog.alert("Submitted Successfully!");
@@ -58,11 +79,6 @@ const FileUploadComponent = () => {
       setIsLoading(false);
     }
   }, []);
-  
-
-
-
-
 
 
 
@@ -117,17 +133,6 @@ const FileUploadComponent = () => {
           </p>
         </div>
       )}
-
-      {/* {isSubmitted && !isLoading &&(
-        <Block>
-          <Button fill popupOpen="#my-popup">View result</Button>
-        </Block>
-      )}
-      {!isSubmitted && !isLoading && (
-        <Block>
-          <Button fill disabled>Know Calories</Button>
-        </Block>
-      )} */}
 
       </Block>
     

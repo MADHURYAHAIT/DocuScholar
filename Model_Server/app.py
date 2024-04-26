@@ -1,6 +1,7 @@
-from typing import Union
+from typing import Union, List
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile, APIRouter
+from fastapi.responses import JSONResponse
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
@@ -11,48 +12,51 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
-from fastapi import FastAPI
-from pydantic import BaseModel
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace "*" with the domain where your React app is hosted
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
 
+router = APIRouter()
+
 load_dotenv()
-
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
-
 
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello2": "World"}
+
+@app.get("/compile")
+async def ask_question(Pdf_data: str):
+    try:
+        # Extract text from PDF files
+        raw_text = Pdf_data
+
+        # Split text into chunks
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+        text_chunks = text_splitter.split_text(raw_text)
+
+        # Load embeddings
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+
+        # Update FAISS index
+        vector_store = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+        vector_store.add_texts(text_chunks)
+        vector_store.save_local("faiss_index")
+
+        return JSONResponse(content={"message": "Index updated successfully - from FAST API"})
+
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
 
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
-
-
-
-# Configure Google API key
-os.getenv("GOOGLE_API_KEY")
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-
-@app.get("/ask")
+@app.post("/ask")
 async def ask_question(user_question: str):
     print(user_question)
     print("=========Hahahaha==========")
@@ -78,6 +82,8 @@ async def ask_question(user_question: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
@@ -98,8 +104,8 @@ def get_vector_store(text_chunks):
 
 def get_conversational_chain():
     prompt_template = """
-    Answer the question as detailed as possible from the provided context and knowledge out of it, make sure to provide all the details and try to include emojis, if the answer is not in
-    provided context just say, "answer is not available in the context, Please ask a suitable question", don't provide the wrong answer\n\n
+    If it's a greeting then greet very nicely \n If it's a question then Answer the question as detailed as possible from the provided context and knowledge out of it, make sure to provide all the details and use relatable emojis with texts to answer, if the answer is not in
+    provided context just say, "answer is not available in the context, Please ask a suitable question", don't provide the wrong answer. \n\n
     Context:\n {context}?\n
     Question: \n{question}\n
 
@@ -112,7 +118,7 @@ def get_conversational_chain():
     return chain
 
 def main():
-    pdf_docs = ["./ca.pdf"]
+    pdf_docs = ["./230.pdf"]
     raw_text = get_pdf_text(pdf_docs)
     text_chunks = get_text_chunks(raw_text)
     get_vector_store(text_chunks)

@@ -39,7 +39,7 @@ const MessagesPage = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.post(
-          "http://192.168.250.239:3000/fetchmessages",
+          "http://192.168.81.239:3000/fetchmessages",
           {
             email,
           }
@@ -65,7 +65,7 @@ const MessagesPage = () => {
         setIsLoading(true);
         try {
           const response = await axios.post(
-            "http://192.168.250.239:3000/message",
+            "http://192.168.81.239:3000/message",
             {
               messagesDataServer,
             },
@@ -269,7 +269,7 @@ const MessagesPage = () => {
       });
 
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/ask?user_question=${encodeURIComponent(text)}`);
+        const response = await axios.post(`http://127.0.0.1:8000/ask?user_question=${encodeURIComponent(text)}`);
         if (response.status === 200) {
           const responseData = response.data;
           // Process the response data as needed
