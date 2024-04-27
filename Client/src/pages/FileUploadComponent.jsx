@@ -61,7 +61,7 @@ const FileUploadComponent = () => {
     try {
       console.log("Here's your image", formData.get('file'));
       setIsLoading(true);  
-      const response = await axios.post('http://192.168.173.239:3000/pdfToText', formData);
+      const response = await axios.post('https://docuscholar.onrender.com/pdfToText', formData);
       if (response.status === 200) {
         const data = response.data;
         console.log("Pdf conversion done!");

@@ -39,7 +39,7 @@ const MessagesPage = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.post(
-          "http://192.168.173.239:3000/fetchmessages",
+          "https://docuscholar.onrender.com/fetchmessages",
           {
             email,
           }
@@ -65,7 +65,7 @@ const MessagesPage = () => {
         setIsLoading(true);
         try {
           const response = await axios.post(
-            "http://192.168.173.239:3000/message",
+            "https://docuscholar.onrender.com/message",
             {
               messagesDataServer,
             },

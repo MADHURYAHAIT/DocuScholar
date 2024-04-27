@@ -45,7 +45,7 @@ const handleSubmit = async (e) => {
   console.log(email, phone, password);
   
   try {
-    const response = await axios.post('http://192.168.81.239:3000/signup', {
+    const response = await axios.post('https://docuscholar.onrender.com/signup', {
       email,
       phone,
       password,

@@ -1,9 +1,8 @@
 #pip install -r requirements.txt
 #pip install -U langchain-community
 
-# fastapi
-# uvicorn
-
+fastapi
+uvicorn
 python-dotenv
 langchain
 PyPDF2
