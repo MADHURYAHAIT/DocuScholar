@@ -31,7 +31,7 @@ load_dotenv()
 def read_root():
     return {"Hello2": "World"}
 
-@app.get("/compile")
+@app.post("/compile")
 async def ask_question(Pdf_data: str):
     try:
         # Extract text from PDF files
