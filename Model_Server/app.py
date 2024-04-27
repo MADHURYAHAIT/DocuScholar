@@ -1,6 +1,6 @@
 from typing import Union, List
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, HTTPException, File, UploadFile, APIRouter
+from fastapi import FastAPI, HTTPException, File, UploadFile, APIRouter,Request
 from fastapi.responses import JSONResponse
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -31,11 +31,14 @@ load_dotenv()
 def read_root():
     return {"Hello2": "World"}
 
+
 @app.post("/compile")
-async def ask_question(Pdf_data: str):
+
+async def ask_question(request: Request):
     try:
         # Extract text from PDF files
-        raw_text = Pdf_data
+        data= await request.json()
+        raw_text = data.get("Pdf_data")
 
         # Split text into chunks
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
