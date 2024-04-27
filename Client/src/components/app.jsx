@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaFilePdf } from "react-icons/fa";
-import SignUp from './Signup';
+import SignUp from './SignUp';
 import {
   f7,
   f7ready,
