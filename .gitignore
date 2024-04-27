@@ -13,5 +13,3 @@ env/
 
 # Ignore macOS system files
 .DS_Store
-
-faiss_index
