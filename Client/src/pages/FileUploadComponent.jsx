@@ -32,7 +32,7 @@ const FileUploadComponent = () => {
     try {
  
       //console.log(txt);
-      const response = await axios.get(`http://127.0.0.1:8000/compile?Pdf_data=${encodeURIComponent(txt)}`);
+      const response = await axios.get(`https://fastapi-app-ufg5.onrender.com/compile?Pdf_data=${encodeURIComponent(txt)}`);
       if (response.status === 200) {
         const responseData = response.data;
         console.log("Index updated successfully!",responseData);

@@ -97,7 +97,7 @@ const MessagesPage = () => {
   //   if (messagesDataServer2.length > 0) {
   //     const sendQuestionToServer = async () => {
   //       try {
-  //         const response = await axios.get(`http://127.0.0.1:8000/ask?user_question=${encodeURIComponent(messagesDataServer2[0])}`);
+  //         const response = await axios.get(`https://fastapi-app-ufg5.onrender.com/ask?user_question=${encodeURIComponent(messagesDataServer2[0])}`);
   //         if (response.status === 200) {
   //           const responseData = response.data;
   //           // Process the response data as needed
@@ -269,7 +269,7 @@ const MessagesPage = () => {
       });
 
       try {
-        const response = await axios.post(`http://127.0.0.1:8000/ask?user_question=${encodeURIComponent(text)}`);
+        const response = await axios.get(`https://fastapi-app-ufg5.onrender.com/ask?user_question=${encodeURIComponent(text)}`);
         if (response.status === 200) {
           const responseData = response.data;
           // Process the response data as needed

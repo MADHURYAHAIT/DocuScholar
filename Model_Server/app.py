@@ -56,7 +56,7 @@ async def ask_question(Pdf_data: str):
 
 
 
-@app.post("/ask")
+@app.get("/ask")
 async def ask_question(user_question: str):
     print(user_question)
     print("=========Hahahaha==========")
