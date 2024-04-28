@@ -1,18 +1,18 @@
 
-import HomePage from '../pages/home.jsx';
-import AboutPage from '../pages/about.jsx';
-import FormPage from '../pages/form.jsx';
-import ProductPage from '../pages/product.jsx';
-import SettingsPage from '../pages/settings.jsx';
-import DescriptionPage from '../pages/description.jsx';
-import TermsAndConditions from '../pages/tnc.jsx';
+import HomePage from './src/pages/home.jsx';
+import AboutPage from './src/pages/about.jsx';
+import FormPage from './src/pages/form.jsx';
+import ProductPage from './src/pages/product.jsx';
+import SettingsPage from './src/pages/settings.jsx';
+import DescriptionPage from './src/pages/description.jsx';
+import TermsAndConditions from './src/pages/tnc.jsx';
 
-import DynamicRoutePage from '../pages/dynamic-route.jsx';
-import RequestAndLoad from '../pages/request-and-load.jsx';
-import NotFoundPage from '../pages/404.jsx';
-import MessagesPage from '../pages/messages.jsx';
-import ReachUs from '../pages/contact.jsx';
-import Credits from '../pages/credit.jsx';
+import DynamicRoutePage from './src/pages/dynamic-route.jsx';
+import RequestAndLoad from './src/pages/request-and-load.jsx';
+import NotFoundPage from './src/pages/404.jsx';
+import MessagesPage from './src/pages/messages.jsx';
+import ReachUs from './src/pages/contact.jsx';
+import Credits from './src/pages/credit.jsx';
 
 var routes = [
   {

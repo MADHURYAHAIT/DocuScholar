@@ -27,7 +27,7 @@ import {
 } from 'framework7-react';
 
 
-import routes from '../js/routes';
+import routes from '../../routes';
 
 import axios from 'axios';
 
