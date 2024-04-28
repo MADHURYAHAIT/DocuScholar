@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaFilePdf } from "react-icons/fa";
 import SignUp from './SignUp';
+import { Analytics } from "@vercel/analytics/react"
 import {
   f7,
   f7ready,
@@ -299,6 +300,7 @@ const MyApp = () => {
       </Page>
       </div>
     </>
+    <Analytics/>
     </App>
       
     )
