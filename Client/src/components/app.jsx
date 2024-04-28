@@ -242,8 +242,9 @@ const MyApp = () => {
   )}
   else{
     return(
-      <App { ...f7params }>
       <>  
+      <App { ...f7params }>
+      
         
       <div className='login'>   
 
@@ -299,9 +300,11 @@ const MyApp = () => {
       </Popup>
       </Page>
       </div>
-    </>
-    <Analytics/>
+   
+    
     </App>
+    <Analytics/>
+    </>
       
     )
   }
