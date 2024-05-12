@@ -1,4 +1,4 @@
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb+srv://mady:abc12345@cluster0.i5niiwg.mongodb.net/DocuScholar?retryWrites=true&w=majority");
+mongoose.connect("your_api");
 console.log("Connection file running");
