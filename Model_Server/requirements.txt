@@ -4,6 +4,7 @@
 fastapi
 uvicorn
 python-dotenv
+langchain-community==0.0.12
 langchain
 PyPDF2
 faiss-cpu
