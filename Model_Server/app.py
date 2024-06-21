@@ -48,7 +48,7 @@ async def ask_question(request: Request):
         embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
         # Update FAISS index
-        vector_store = FAISS.load_local("faiss_index", embeddings)#, allow_dangerous_deserialization=True add this argument for older code
+        vector_store = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True )#, allow_dangerous_deserialization=True add this argument for older code
         vector_store.add_texts(text_chunks)
         vector_store.save_local("faiss_index")
 
