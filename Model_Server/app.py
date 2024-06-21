@@ -48,7 +48,7 @@ async def ask_question(request: Request):
         embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
         # Update FAISS index
-        vector_store = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+        vector_store = FAISS.load_local("faiss_index", embeddings)#, allow_dangerous_deserialization=True add this argument for older code
         vector_store.add_texts(text_chunks)
         vector_store.save_local("faiss_index")
 
@@ -69,7 +69,7 @@ async def ask_question(user_question: str):
         embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
         # Load FAISS index
-        new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+        new_db = FAISS.load_local("faiss_index", embeddings) #, allow_dangerous_deserialization=True add this argument for older code
 
         # Search for relevant documents
         docs = new_db.similarity_search(user_question)
@@ -83,6 +83,7 @@ async def ask_question(user_question: str):
         return {"response": response["output_text"]}
 
     except Exception as e:
+        print(f"Error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

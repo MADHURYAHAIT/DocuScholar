@@ -7,8 +7,7 @@ node_modules
 venv/
 dsenv/
 env/
-
-
+updatedDsEnv/
 # Ignore compiled Python files
 *.pyc
 
