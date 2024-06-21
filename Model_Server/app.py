@@ -69,7 +69,7 @@ async def ask_question(user_question: str):
         embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
         # Load FAISS index
-        new_db = FAISS.load_local("faiss_index", embeddings) #, allow_dangerous_deserialization=True add this argument for older code
+        new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True) # add this argument for older code
 
         # Search for relevant documents
         docs = new_db.similarity_search(user_question)
